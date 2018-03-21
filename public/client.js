@@ -4,7 +4,7 @@
 (function(){
   console.log('hello world :o');
   
-  const dreams = [];
+  let dreams = [];
   
   // define variables that reference elements on our page
   const dreamsList = document.getElementById('dreams');
@@ -50,26 +50,3 @@
   };
   
 })()
-
-/*
-$(function() {
-  console.log('hello world :o');
-  
-  $.get('/dreams', function(dreams) {
-    dreams.forEach(function(dream) {
-      $('<li></li>').text(dream).appendTo('ul#dreams');
-    });
-  });
-
-  $('form').submit(function(event) {
-    event.preventDefault();
-    var dream = $('input').val();
-    $.post('/dreams?' + $.param({dream: dream}), function() {
-      $('<li></li>').text(dream).appendTo('ul#dreams');
-      $('input').val('');
-      $('input').focus();
-    });
-  });
-
-});
-*/
