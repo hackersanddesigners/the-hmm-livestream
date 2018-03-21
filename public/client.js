@@ -4,17 +4,29 @@
 (function(){
   console.log('hello world :o');
   
-  // our default array of dreams
-  const dreams = [
-    'Find and count some sheep',
-    'Climb a really tall mountain',
-    'Wash the dishes'
-  ];
+  const dreams = [];
   
   // define variables that reference elements on our page
   const dreamsList = document.getElementById('dreams');
   const dreamsForm = document.forms[0];
   const dreamInput = dreamsForm.elements['dream'];
+  
+  // a helper function to call when our request for dreams is done
+  const getDreamsListener = function() {
+    // parse our response to convert to JSON
+    dreams = JSON.parse(this.responseText);
+    
+    // iterate through every dream and add it to our page
+    dreams.forEach( function(row) {
+      appendNewDream(row.dream);
+    });
+  }
+  
+  // request the dreams from our app's sqlite database
+  const dreamRequest = new XMLHttpRequest();
+  dreamRequest.onload = getDreamsListener;
+  dreamRequest.open('get', '/getDreams');
+  dreamRequest.send();
   
   // a helper function that creates a list item for a given dream
   const appendNewDream = function(dream) {
@@ -22,11 +34,6 @@
     newListItem.innerHTML = dream;
     dreamsList.appendChild(newListItem);
   }
-  
-  // iterate through every dream and add it to our page
-  dreams.forEach( function(dream) {
-    appendNewDream(dream);
-  });
   
   // listen for the form to be submitted and add a new dream when it is
   dreamsForm.onsubmit = function(event) {

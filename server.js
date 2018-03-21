@@ -46,6 +46,13 @@ app.get("/", function (request, response) {
   response.sendFile(__dirname + '/views/index.html');
 });
 
+// endpoint to get all the dreams in the database
+app.get('/getDreams', function(request, response) {
+  db.all('SELECT * from Dreams', function(err, rows) {
+    response.send(JSON.stringify(rows));
+  });
+});
+
 // listen for requests :)
 var listener = app.listen(process.env.PORT, function () {
   console.log('Your app is listening on port ' + listener.address().port);
