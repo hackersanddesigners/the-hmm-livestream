@@ -42,7 +42,7 @@ db.serialize(function(){
 });
 
 // http://expressjs.com/en/starter/basic-routing.html
-app.get("/", function (request, response) {
+app.get('/', function(request, response) {
   response.sendFile(__dirname + '/views/index.html');
 });
 
