@@ -13,6 +13,18 @@ const App = {
       App.dreams = result;
     })
   },
+  
+  streams: [],
+  getStreams: () => {
+    m.request({
+      method: "GET",
+      url: "/streams",
+    })
+    .then(function(result) {
+      App.streams = result;
+    })
+  },
+  
   view: function() {
     return [
       m('header', [
@@ -21,7 +33,16 @@ const App = {
       m("main", [
         m("h1", {class: "title"}, `Num: ${App.count}`),
         m("button", { onclick: App.getDreams }, "Get Dreams"),
+        m("button", { onclick: App.getStreams }, "Get Streams"),
         m("button", { onclick: () => (App.count = App.count + 1) }, "A button"),
+        m("ul", App.dreams.map(function(dream) {
+            return m("li.user-list-item", dream.dream)
+        })),
+        
+        m("ol", App.streams.map(function(stream) {
+            console.log(stream)
+            return m("li.user-list-item", stream)
+        })),
       ]),
     ];
   }

@@ -20,6 +20,9 @@ var exists = fs.existsSync(dbFile);
 var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database(dbFile);
 
+const Mux = require('@mux/mux-node');
+const { Video } = new Mux(process.env.MUX_TOKEN_ID, process.env.MUX_TOKEN_SECRET);
+
 // if ./.data/sqlite.db does not exist, create it, otherwise print records to console
 db.serialize(function(){
   if (!exists) {
@@ -53,6 +56,11 @@ app.get('/getDreams', function(request, response) {
   db.all('SELECT * from Dreams', function(err, rows) {
     response.send(JSON.stringify(rows));
   });
+});
+
+app.get('/streams', async (request, response) => {
+  const list = await Video.liveStreams.list();
+  response.send(JSON.stringify(list));
 });
 
 // listen for requests :)
