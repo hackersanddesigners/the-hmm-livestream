@@ -59,8 +59,9 @@ app.get('/getDreams', function(request, response) {
 });
 
 app.get('/streams', async (request, response) => {
-  const list = await Video.liveStreams.list();
-  response.send(JSON.stringify(list));
+  const res = await Video.liveStreams.list();
+  console.log(res.data.data);
+  response.send(JSON.stringify(res.data.data));
 });
 
 // listen for requests :)

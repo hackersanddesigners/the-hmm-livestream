@@ -41,7 +41,7 @@ const App = {
         
         m("ol", App.streams.map(function(stream) {
             console.log(stream)
-            return m("li.user-list-item", stream)
+            return m("li.user-list-item", stream.status)
         })),
       ]),
     ];
