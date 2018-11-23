@@ -14,18 +14,18 @@ const dbFile = './.data/sqlite.db';
 const sqlite = require('sqlite');
 
 const initializeDb = () => {
-  if (!fs.existsSync(dbFile)) {
-    fs.writeFileSync(dbFile, '');
-  }
-  
-  return Promise.resolve()
-    .then(() => sqlite.open(dbFile, { mode: 2 }))
-    .then(db => db.migrate({ force: 'last' }));
+  fs.open(dbFile, 'wx', (err, fd) => {
+    if (err && err.code !== 'EEXIST') {
+      throw err;
+    }
+
+    return Promise.resolve()
+      .then(() => sqlite.open(dbFile, { mode: 2 }))
+      .then(db => db.migrate({ force: 'last' }));
+  });
 }
 
-initializeDb(); 
-
-
+const db = initializeDb();
 
 // http://expressjs.com/en/starter/basic-routing.html
 app.get('/', function(request, response) {
@@ -50,8 +50,9 @@ app.post('/streams', async (request, response) => {
   };
 
   let { data: { data: stream } } = await Video.liveStreams.create(createBody);
+  await db.run(SQL`INSERT INTO Streams `);
   db.serialize(function() {
-    db.run('INSERT INTO Dreams (dream) VALUES ("Find and count some sheep"), ("Climb a really tall mountain"), ("Wash the dishes")');
+    db.run('INSERT INTO Streams (dream) VALUES ("Find and count some sheep"), ("Climb a really tall mountain"), ("Wash the dishes")');
   });
 });
 
