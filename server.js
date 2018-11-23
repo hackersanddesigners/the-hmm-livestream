@@ -12,6 +12,8 @@ var SQL = require('sql-template-strings');
 var dbFile = './.data/sqlite.db';
 var sqlite = require('sqlite');
 
+const 
+
 const dbPromise = Promise.resolve()
   .then(() => sqlite.open(dbFile))
   .then(db => db.migrate({ force: 'last' }));
