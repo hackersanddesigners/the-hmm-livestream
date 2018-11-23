@@ -50,10 +50,8 @@ app.post('/streams', async (request, response) => {
   };
 
   let { data: { data: stream } } = await Video.liveStreams.create(createBody);
-  await db.run(SQL`INSERT INTO Streams `);
-  db.serialize(function() {
-    db.run('INSERT INTO Streams (dream) VALUES ("Find and count some sheep"), ("Climb a really tall mountain"), ("Wash the dishes")');
-  });
+  const insert = await db.run(SQL`INSERT INTO streams (streamKey, streamId) VALUES (${stream.streamKey}, ${stream.streamId})`);
+  console.log(insert);
 });
 
 app.get('/streams', async (request, response) => {

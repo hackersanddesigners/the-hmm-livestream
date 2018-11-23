@@ -2,19 +2,15 @@ const root = document.body
 const m = window.m;
 
 const App = {
-  count: 0,
-  dreams: [],
-  getDreams: () => {
-    m.request({
-      method: "GET",
-      url: "/getDreams",
-    })
-    .then(function(result) {
-      App.dreams = result;
-    })
-  },
-  
   streams: [],
+  createStream: () => {
+    m.request({
+      method: 'POST',
+      url: '/streams'
+    }).then((res) => {
+      App.streams = [res, ...App.streams];
+    });
+  },
   getStreams: () => {
     m.request({
       method: "GET",
@@ -32,12 +28,8 @@ const App = {
       ]),
       m("main", [
         m("h1", {class: "title"}, `Num: ${App.count}`),
-        m("button", { onclick: App.getDreams }, "Get Dreams"),
         m("button", { onclick: App.getStreams }, "Get Streams"),
-        m("button", { onclick: () => (App.count = App.count + 1) }, "A button"),
-        m("ul", App.dreams.map(function(dream) {
-            return m("li.user-list-item", dream.dream)
-        })),
+        m("button", { onclick: App.createStream }, "Create Stream"),
         
         m("ol", App.streams.map(function(stream) {
             console.log(stream)
