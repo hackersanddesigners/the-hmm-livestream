@@ -12,10 +12,8 @@ var SQL = require('sql-template-strings');
 var dbFile = './.data/sqlite.db';
 var sqlite = require('sqlite');
 
-const 
-
 const dbPromise = Promise.resolve()
-  .then(() => sqlite.open(dbFile))
+  .then(() => sqlite.open(dbFile, { mode: 2 }))
   .then(db => db.migrate({ force: 'last' }));
 
 // http://expressjs.com/en/starter/basic-routing.html
