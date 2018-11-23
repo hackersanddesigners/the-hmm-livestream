@@ -58,6 +58,20 @@ app.get('/getDreams', function(request, response) {
   });
 });
 
+app.post('/streams', async (request, response) => {
+  const createBody = { 
+    playback_policy: 'public', 
+    new_asset_settings: { 
+      playback_policy: 'public' 
+    }
+  };
+
+  let { data: { data: stream } } = await Video.liveStreams.create(createBody);
+  db.serialize(function() {
+    db.run('INSERT INTO Dreams (dream) VALUES ("Find and count some sheep"), ("Climb a really tall mountain"), ("Wash the dishes")');
+  });
+});
+
 app.get('/streams', async (request, response) => {
   const res = await Video.liveStreams.list();
   console.log(res.data.data);
