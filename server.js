@@ -13,15 +13,19 @@ const SQL = require('sql-template-strings');
 const dbFile = './.data/sqlite.db';
 const sqlite = require('sqlite');
 
-const initializeDb = async () => {
-  if (fs.existsSync(dbFile));
+const initializeDb = () => {
+  if (!fs.existsSync(dbFile)) {
+    fs.writeFileSync(dbFile, '');
+  }
+  
+  return Promise.resolve()
+    .then(() => sqlite.open(dbFile, { mode: 2 }))
+    .then(db => db.migrate({ force: 'last' }));
 }
 
 initializeDb(); 
 
-const dbPromise = Promise.resolve()
-  .then(() => sqlite.open(dbFile, { mode: 2 }))
-  .then(db => db.migrate({ force: 'last' }));
+
 
 // http://expressjs.com/en/starter/basic-routing.html
 app.get('/', function(request, response) {
