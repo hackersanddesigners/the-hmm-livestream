@@ -8,9 +8,16 @@ const Mux = require('@mux/mux-node');
 const { Video } = new Mux(process.env.MUX_TOKEN_ID, process.env.MUX_TOKEN_SECRET);
 
 // init sqlite db
-var SQL = require('sql-template-strings');
-var dbFile = './.data/sqlite.db';
-var sqlite = require('sqlite');
+const fs = require('fs');
+const SQL = require('sql-template-strings');
+const dbFile = './.data/sqlite.db';
+const sqlite = require('sqlite');
+
+const initializeDb = async () => {
+  if (fs.existsSync(dbFile));
+}
+
+initializeDb(); 
 
 const dbPromise = Promise.resolve()
   .then(() => sqlite.open(dbFile, { mode: 2 }))
