@@ -25,7 +25,7 @@ const initializeDb = () => {
   });
 }
 
-const db = initializeDb();
+const dbPromise = initializeDb();
 
 // http://expressjs.com/en/starter/basic-routing.html
 app.get('/', function(request, response) {
@@ -50,6 +50,7 @@ app.post('/streams', async (request, response) => {
   };
 
   let { data: { data: stream } } = await Video.liveStreams.create(createBody);
+  const db = await dbPromise;
   const insert = await db.run(SQL`INSERT INTO streams (streamKey, streamId) VALUES (${stream.streamKey}, ${stream.streamId})`);
   console.log(insert);
 });
