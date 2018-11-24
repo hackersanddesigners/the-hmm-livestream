@@ -2,6 +2,9 @@ const root = document.body
 const m = window.m;
 
 const App = {
+  count: 0,
+  increment: () => App.count + 1,
+  
   streams: [],
   createStream: () => {
     m.request({
@@ -30,6 +33,7 @@ const App = {
         m("h1", {class: "title"}, `Num: ${App.count}`),
         m("button", { onclick: App.getStreams }, "Get Streams"),
         m("button", { onclick: App.createStream }, "Create Stream"),
+        m("button", { onclick: App.increment }, "Increment!"),
         
         m("ol", App.streams.map(function(stream) {
             console.log(stream)
