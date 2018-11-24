@@ -3,7 +3,7 @@ const m = window.m;
 
 const App = {
   count: 0,
-  increment: () => App.count + 1,
+  increment: () => { App.count = App.count + 1 },
   
   streams: [],
   createStream: () => {
