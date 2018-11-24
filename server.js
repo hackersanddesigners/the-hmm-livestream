@@ -8,24 +8,35 @@ const Mux = require('@mux/mux-node');
 const { Video } = new Mux(process.env.MUX_TOKEN_ID, process.env.MUX_TOKEN_SECRET);
 
 // init sqlite db
+const util = require('util');
 const fs = require('fs');
-const SQL = require('sql-template-strings');
-const dbFile = './.data/sqlite.db';
-const sqlite = require('sqlite');
+const stateFilePath = './.data/stream';
+const readFile = util.promisify(fs.readFile);
+const writeFile = util.promisify(fs.writeFile);
 
-const initializeDb = () => {
-  fs.open(dbFile, 'wx', (err, fd) => {
-    if (err && err.code !== 'EEXIST') {
-      throw err;
-    }
+const createStreamKey = async () => {
+  // let stream = await Video.liveStreams.create({ playback_policy: 'public', new_asset_settings: { playback_policy: 'public' } });
+  let { data: { data: [ stream ] } } = await Video.liveStreams.list();
+  
+  return stream;
+};
 
-    return Promise.resolve()
-      .then(() => sqlite.open(dbFile, { mode: 2 }))
-      .then(db => db.migrate({ force: 'last' }));
-  });
+const initializeDb = async () => {
+  let stream;
+
+  try {
+    const stateFile = await readFile(stateFilePath, 'utf8');
+    stream = JSON.parse(stateFile);
+    console.log('Found an existing stream!');
+  } catch (err) {
+    console.log('No stream found, creating a new one.');
+    console.error(err);
+    stream = await createStreamKey();
+    await writeFile(stateFilePath, JSON.stringify(stream));
+  }
 }
 
-const dbPromise = initializeDb();
+initializeDb();
 
 // http://expressjs.com/en/starter/basic-routing.html
 app.get('/', function(request, response) {
