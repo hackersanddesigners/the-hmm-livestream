@@ -114,8 +114,9 @@
         m('footer', [
           m('.glitchButton', { style: 'position:fixed;top:20px;right:20px;' }),
           m('p',
-            'Made with ❤️ and'
-            m(a href="https://mux.com" title target="_blank">Mux Video</a>'),
+            'Made with ❤️ and ',
+            m('a', { href: 'https://mux.com', target: 'blank' }, 'Mux Video'),
+          ),
         ]),
       ];
     }
