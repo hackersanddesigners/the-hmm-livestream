@@ -106,7 +106,7 @@
           m('h3', 'Recent Streams'),
           m('ul.recentStreams', App.recentStreams.map((asset) => (
             m('li', [
-              m('span.time', (new Date(asset['created_at'] * 1000)).toDateString()),
+              m('span.time', (new Date(asset.createdAt * 1000)).toDateString()),
               m(ArchivePreview, { playbackId: asset.playbackId })
             ])
           ))),

@@ -114,7 +114,7 @@ app.get('/recent', async (req, res) => {
         return {
           playbackId: getPlaybackId(asset),
           status: asset.status,
-          created_at: asset.created_at,
+          createdAt: asset.created_at,
         };
       })
     )
