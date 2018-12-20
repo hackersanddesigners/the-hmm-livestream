@@ -59,11 +59,6 @@ const createLiveStream = async () => {
   });
 };
 
-// Gets the details of a Live Stream from the Mux Video API
-const getStreamDetails = async (streamId) => {
-  return await Video.LiveStreams.get(streamId);
-}
-
 // Reads a state file looking for an existing Live Stream, if it can't find one, 
 // creates a new one, saving the new live stream to our state file and global
 // STREAM variable.
@@ -72,7 +67,7 @@ const initialize = async () => {
     const stateFile = await readFile(stateFilePath, 'utf8');
     STREAM = JSON.parse(stateFile);
     console.log('Found an existing stream! Fetching updated data.');
-    STREAM = await getStreamDetails(STREAM.id);
+    STREAM = await Video.LiveStreams.get(STREAM.id);
   } catch (err) {
     console.log('No stream found, creating a new one.');
     STREAM = await createLiveStream();
