@@ -52,19 +52,16 @@ const createLiveStream = async () => {
   }
 
   // Create a new Live Stream!
-  let { data: { data: stream }} = await Video.liveStreams.create({
+  return await Video.LiveStreams.create({
     playback_policy: 'public',
     reconnect_window: 10,
-    new_asset_settings: { playback_policy: 'public' }
+    new_asset_settings: { playback_policy: 'public' } 
   });
-
-  return stream;
 };
 
 // Gets the details of a Live Stream from the Mux Video API
 const getStreamDetails = async (streamId) => {
-  let { data: { data: stream } } = await Video.liveStreams.get(streamId);
-  return stream;
+  return await Video.LiveStreams.get(streamId);
 }
 
 // Reads a state file looking for an existing Live Stream, if it can't find one, 
@@ -96,7 +93,7 @@ const publicStreamDetails = stream => ({
 
 // API for getting the current live stream and its state for bootstrapping the app
 app.get('/stream', async (req, res) => {
-  const { data: { data: stream } } = await Video.liveStreams.get(STREAM.id);
+  const stream = await Video.LiveStreams.get(STREAM.id);
   res.json(
     publicStreamDetails(stream)
   );
@@ -113,8 +110,7 @@ app.get('/recent', async (req, res) => {
     .reverse()
     .slice(0, 5)
     .map((assetId) =>
-      Video.assets.get(assetId).then(muxRes => {
-        const asset = muxRes.data;
+      Video.Assets.get(assetId).then(asset => {
 
         return {
           playbackId: getPlaybackId(asset),
