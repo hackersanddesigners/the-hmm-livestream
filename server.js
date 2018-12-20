@@ -9,14 +9,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
+// Setup the Mux SDK
 const Mux = require('@mux/mux-node');
 const { Video } = new Mux(process.env.MUX_TOKEN_ID, process.env.MUX_TOKEN_SECRET);
 let STREAM;
-
-const webhookUser = {
-  name: 'muxer',
-  pass: 'muxology',
-};
 
 // Storage Configuration
 const util = require('util');
@@ -25,25 +21,28 @@ const stateFilePath = './.data/stream';
 const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
 
+// Authentication Configuration
+const webhookUser = {
+  name: 'muxer',
+  pass: 'muxology',
+};
+
+// Authentication Middleware
 const auth = (req, res, next) => {
   function unauthorized(res) {
       res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
       return res.send(401);
   };
-
   const user = basicAuth(req);
-
   if (!user || !user.name || !user.pass) {
       return unauthorized(res);
   };
-
   if (user.name === webhookUser.name && user.pass === webhookUser.pass) {
       return next();
   } else {
       return unauthorized(res);
   };
 };
-
 
 // Creates a new Live Stream so we can get a Stream Key
 const createLiveStream = async () => {
@@ -103,9 +102,12 @@ app.get('/stream', async (req, res) => {
   );
 });
 
+// API which Returns the 10 most recent VOD assets made from our Live Stream
 app.get('/recent', async (req, res) => {
   const recentAssetIds = STREAM['recent_asset_ids'] || [];
 
+  
+  // For each VOD asset we know about, get the details from Mux Video
   const assets = await Promise.all(
     recentAssetIds
     .reverse()
@@ -126,7 +128,7 @@ app.get('/recent', async (req, res) => {
   res.json(assets);
 });
 
-// Listen for callbacks from Mux
+// API which Listens for callbacks from Mux
 app.post('/mux-hook', auth, function (req, res) {
   STREAM.status = req.body.data.status;
     
