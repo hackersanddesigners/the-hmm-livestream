@@ -1,10 +1,7 @@
 {
-  "//1": "describes your app and its dependencies",
-  "//2": "https://docs.npmjs.com/files/package.json",
-  "//3": "updating this file will download and update your packages",
-  "name": "hello-sqlite",
+  "name": "MuxTubelet",
   "version": "0.0.1",
-  "description": "A simple Node app with SQLite as a database management system, instantly up and running.",
+  "description": "A simple live streaming video app, powered by Mux.com",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
@@ -17,9 +14,6 @@
   },
   "engines": {
     "node": "8.x"
-  },
-  "repository": {
-    "url": "https://glitch.com/edit/#!/hello-sqlite"
   },
   "license": "MIT",
   "keywords": [
