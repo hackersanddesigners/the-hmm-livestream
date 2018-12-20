@@ -99,11 +99,10 @@ app.get('/stream', async (req, res) => {
   );
 });
 
-// API which Returns the 10 most recent VOD assets made from our Live Stream
+// API which Returns the 5 most recent VOD assets made from our Live Stream
 app.get('/recent', async (req, res) => {
   const recentAssetIds = STREAM['recent_asset_ids'] || [];
 
-  
   // For each VOD asset we know about, get the details from Mux Video
   const assets = await Promise.all(
     recentAssetIds
@@ -120,7 +119,6 @@ app.get('/recent', async (req, res) => {
       })
     )
   );
-
   res.json(assets);
 });
 
