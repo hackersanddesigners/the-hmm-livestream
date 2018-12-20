@@ -21,7 +21,6 @@ const stateFilePath = './.data/stream';
 const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
 
-// Hello
 // Authentication Configuration
 const webhookUser = {
   name: 'muxer',
@@ -128,9 +127,6 @@ app.get('/recent', async (req, res) => {
 // API which Listens for callbacks from Mux
 app.post('/mux-hook', auth, function (req, res) {
   STREAM.status = req.body.data.status;
-
-  console.log(req.body.type);
-
   
   switch (req.body.type) {
 
