@@ -114,7 +114,7 @@ app.get('/recent', async (req, res) => {
     .slice(0, 5)
     .map((assetId) =>
       Video.assets.get(assetId).then(muxRes => {
-        const asset = muxRes.data.data;
+        const asset = muxRes.data;
 
         return {
           playbackId: getPlaybackId(asset),
