@@ -127,9 +127,13 @@ app.get('/recent', async (req, res) => {
 // API which Listens for callbacks from Mux
 app.post('/mux-hook', auth, function (req, res) {
   STREAM.status = req.body.data.status;
-    
+
+  console.log(req.body.type);
+
+  
   switch (req.body.type) {
 
+      
     // When a stream goes idle, we want to capture the automatically created 
     // asset IDs, so we can let people watch the on-demand copies of our live streams
     case 'video.live_stream.idle':
