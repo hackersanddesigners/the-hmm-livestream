@@ -94,27 +94,27 @@ app.get('/stream', async (req, res) => {
 });
 
 // API which Returns the 5 most recent VOD assets made from our Live Stream
-app.get('/recent', async (req, res) => {
-  const recentAssetIds = STREAM['recent_asset_ids'] || [];
+// app.get('/recent', async (req, res) => {
+//   const recentAssetIds = STREAM['recent_asset_ids'] || [];
 
-  // For each VOD asset we know about, get the details from Mux Video
-  const assets = await Promise.all(
-    recentAssetIds
-    .reverse()
-    .slice(0, 5)
-    .map((assetId) =>
-      Video.Assets.get(assetId).then(asset => {
+//   // For each VOD asset we know about, get the details from Mux Video
+//   const assets = await Promise.all(
+//     recentAssetIds
+//     .reverse()
+//     .slice(0, 5)
+//     .map((assetId) =>
+//       Video.Assets.get(assetId).then(asset => {
 
-        return {
-          playbackId: getPlaybackId(asset),
-          status: asset.status,
-          createdAt: asset.created_at,
-        };
-      })
-    )
-  );
-  res.json(assets);
-});
+//         return {
+//           playbackId: getPlaybackId(asset),
+//           status: asset.status,
+//           createdAt: asset.created_at,
+//         };
+//       })
+//     )
+//   );
+//   res.json(assets);
+// });
 
 // API which Listens for callbacks from Mux
 app.post('/mux-hook', auth, function (req, res) {
