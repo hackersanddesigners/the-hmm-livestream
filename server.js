@@ -1,26 +1,24 @@
-require('dotenv').config();
-const express = require('express');
-const bodyParser = require('body-parser');
-const basicAuth = require('basic-auth');
-const app = express();
-const http = require('http').Server(app);
-const io = require('socket.io')(http);
+require('dotenv').config()
+const fs = require('fs').promises
+const express = require('express')
+const bodyParser = require('body-parser')
+const basicAuth = require('basic-auth')
+const app = express()
+const http = require('http').Server(app)
+const io = require('socket.io')(http)
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static('public'));
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(express.static('public'))
 
 // Setup the Mux SDK
-const Mux = require('@mux/mux-node');
-const { Video } = new Mux(process.env.MUX_TOKEN_ID, process.env.MUX_TOKEN_SECRET);
-let STREAM;
+const Mux = require('@mux/mux-node')
+const { Video } = new Mux(process.env.MUX_TOKEN_ID, process.env.MUX_TOKEN_SECRET)
+let STREAM
 
 // Storage Configuration
-const util = require('util');
-const fs = require('fs');
-const stateFilePath = './.data/stream';
-const readFile = util.promisify(fs.readFile);
-const writeFile = util.promisify(fs.writeFile);
+
+const stateFilePath = './.data/stream'
 
 // Authentication Configuration
 const webhookUser = {
@@ -65,14 +63,14 @@ const createLiveStream = async () => {
 // STREAM variable.
 const initialize = async () => {
   try {
-    const stateFile = await readFile(stateFilePath, 'utf8');
+    const stateFile = await fs.readFile(stateFilePath, 'utf8');
     STREAM = JSON.parse(stateFile);
     console.log('Found an existing stream! Fetching updated data.');
     STREAM = await Video.LiveStreams.get(STREAM.id);
   } catch (err) {
     console.log('No stream found, creating a new one.');
     STREAM = await createLiveStream();
-    await writeFile(stateFilePath, JSON.stringify(STREAM));
+    await fs.writeFile(stateFilePath, JSON.stringify(STREAM));
   }
   return STREAM;
 }
