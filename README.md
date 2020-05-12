@@ -1,8 +1,5 @@
-# Moving Bodies Bus Symposium
+# The Hmm
 
-Single-page app to livestream the *Moving Bodies Bus Symposium*.
+Single-page app to livestream The Hmm events.
 
-## Setup
-
-- [OBS](https://obsproject.com/)
-- [MUX](https://mux.com/)
+Starting off from [this codebase](https://mux.com/articles/how-to-build-your-own-live-streaming-app-with-mux-video/), but heavily deformed it along the way.
