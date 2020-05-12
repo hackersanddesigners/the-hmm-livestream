@@ -1,6 +1,8 @@
 const choo = require('choo')
 const devtools = require('choo-devtools')
 const css = require('sheetify')
+css('./design/index.js')
+css('./design/design.css')
 
 const app = choo()
 app.use(devtools())

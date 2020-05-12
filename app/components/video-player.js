@@ -16,12 +16,10 @@ class videoPlayer extends nc {
     this.emit = emit
     this.data = data
 
-    console.log('data =>', data)
-
     const srcUrl = `https://stream.mux.com/${data.stream.playbackId}.m3u8`
 
     return html`
-      <video style="border: 1px solid red; background-color: black" src=${srcUrl} controls=${state.components.video.controls} muted=${state.components.video.muted} id="video"> 
+      <video src=${srcUrl} controls=${state.components.video.controls} muted=${state.components.video.muted} class="db w100 bgc-bk"> 
     `
   }
 
@@ -30,8 +28,6 @@ class videoPlayer extends nc {
       const video = el
       const stream = this.state.components.video.stream
       const srcUrl = `https://stream.mux.com/${stream.playbackId}.m3u8`
-
-      console.log(video)
 
       // if hls.js is supported on this platform
       if (Hls.isSupported()) {

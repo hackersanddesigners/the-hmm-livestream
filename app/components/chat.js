@@ -18,14 +18,15 @@ class chat extends nc {
     this.data = data
 
     return html`
-      <div>
+      <div class="${state.components.chat.toggle ? 'x xdc h100' : 'dn'}">
         ${storage()}
-        <h3>chat</h3>
-        <div>${msgList(state.components.chat.posts)}</div>
-        <form onsubmit=${onsubmit} method="post">
+        <div class="p0-5 h100 oys">
+          <div>${msgList(state.components.chat.posts)}</div>
+        </div>
+        <form onsubmit=${onsubmit} method="post" class="p0-5 bt-wh bgc-bl">
           ${setUsername(state)}
-          <input class="msg" type="text">
-          <input type="submit" value="Send" class="send fs1 tdu curp">
+          <input required class="message w100" type="text" placeholder="Type here to send a message">
+          <input class="psf t0 l-999" type="submit" value="Send">
         </form>
       </div> 
     `
@@ -33,21 +34,35 @@ class chat extends nc {
     function setUsername (state) {
       if (state.components.chat.username === undefined) {
         return html`
-          <div class="">
-            <label>Pick a username</label>
-            <input class="username" type="text">
-          </div>
+          <input required class="username" type="text" placeholder="Pick a username">
         `
       }
     }
+
+    function formatDate(ts) {
+      const t = new Date(ts).toLocaleString('nl-NL')
+      const tsp = t.split(' ')
+      const dt_sp = tsp[0].split('-')
+      const tt_sp = tsp[1].split(':')
+
+      const date = `${dt_sp[2]}.${dt_sp[1]}.${dt_sp[0]} ${tt_sp[0]}:${tt_sp[1]}`
+
+      const iso = `${dt_sp[2]}.${dt_sp[1]}.${dt_sp[0]}T${tt_sp[0]}:${tt_sp[1]}`
+
+      return {
+        iso: iso,
+        date: date
+      }
+    }
+    
 
     function msgList (data) {
       if (data.length > 0) {
         return data.map(msg => {
           return html`
-            <div style="border: 1px solid blue">
-              <p>${msg.timestamp} ${msg.username}</p>
-              <p>${msg.value}</p>
+            <div class="x xdc xw pb1">
+              <time datetime="${formatDate(msg.timestamp).iso}" class="ft-ms fs0-8">${formatDate(msg.timestamp).date}</time>
+              <p class="pl1">${msg.username}: ${msg.value}</p>
             </div>
           `
         })
@@ -62,12 +77,15 @@ class chat extends nc {
       e.preventDefault()
       const form = e.currentTarget
 
+      const input_username = form.querySelector('.username')
+      const input_message = form.querySelector('.message')
+
       let username = localStorage.getItem('username')
       console.log(username)
       
-      if (form[0].value !== '') {
-        localStorage.setItem('username', form[0].value)
-        state.components.chat.username = form[0].value
+      if (input_username !== null) {
+        localStorage.setItem('username', input_username.value)
+        state.components.chat.username = input_username.value
       } else {
         state.components.chat.username = username
       }
@@ -75,12 +93,10 @@ class chat extends nc {
       const msg = {
         timestamp: new Date(),
         username: state.components.chat.username,
-        value: form[1].value
+        value: input_message.value
       }
 
       socket.emit('chat-msg', msg)
-      form[0].value = ''
-      form[1].value = ''
     }
 
 

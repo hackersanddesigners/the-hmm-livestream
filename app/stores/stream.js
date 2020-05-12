@@ -9,6 +9,7 @@ function stream (state, emitter) {
   } 
 
   state.components.chat = {
+    toggle: false,
     username: undefined,
     posts: []
   }
@@ -31,6 +32,11 @@ function stream (state, emitter) {
     } else {
       return posts.status
     }
+  })
+
+  emitter.on('chat-toggle', () => {
+    state.components.chat.toggle =! state.components.chat.toggle
+    emitter.emit('render')
   })
 
   socket.on('chat-msg', (msg) => {

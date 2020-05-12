@@ -1,0 +1,77 @@
+@font-face {
+  font-family:'NotCourier';
+  src:url('/assets/fonts/NotCourierSans.woff2') format('woff2'),url('/assets/fonts/NotCourierSans.woff') format('woff'),url('/assets/fonts/NotCourierSans.otf') format('opentype');
+  font-style:normal;font-weight:400;
+}
+
+:root {
+  --ft-ss: 'Arial', sans-serif;
+  --ft-ms: 'Not Courier', monospace;
+  --c-wh: #fff;
+  --c-yl: #ff0;
+  --c-bl: blue;
+  --c-bk: #000;
+}
+
+html { box-sizing: border-box }
+*, *:before, *:after { box-sizing: inherit }
+html, body, h1, h2, h3, h4, h5, h6, p, ol, ul, li, input, button, figure, video { margin: 0; padding: 0 }
+
+a {
+  color: inherit;
+}
+
+input,
+button {
+  border: none;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  background: none;
+  font-family: inherit;
+  font-size: inherit;
+  text-align: inherit;
+  color: inherit;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+html {
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 18px;
+  line-height: 1.2;
+  font-family: var(--ft-ss);
+  color: var(--c-bk);
+}
+
+body {
+  -webkit-overflow-scrolling: touch;
+  -ms-overflow-style: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+em, i {
+  font-family: var(--ft-it);
+}
+
+strong, b {
+  font-family: var(--ft-bd);
+}
+
+.ft-ss {
+    font-family: var(--ft-ss);
+}
+
+.ft-ms {
+    font-family: var(--ft-ms);
+}
+
+.l-999 {
+  left: -999px;
+}
