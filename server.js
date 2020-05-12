@@ -85,7 +85,7 @@ const publicStreamDetails = stream => ({
 
 
 // setup db
-const adapter = new FileAsync('db.json')
+const adapter = new FileAsync('./data/db.json')
 
 // -- wrap low.db around endpoints
 db(adapter)
