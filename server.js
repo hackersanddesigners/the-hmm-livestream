@@ -4,6 +4,11 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const basicAuth = require('basic-auth')
 const app = express()
+const Mux = require('@mux/mux-node')
+const { Video } = new Mux(process.env.MUX_TOKEN_ID, process.env.MUX_TOKEN_SECRET)
+let STREAM
+const db = require('lowdb')
+const FileAsync = require('lowdb/adapters/FileAsync')
 const http = require('http').Server(app)
 const io = require('socket.io')(http)
 
@@ -11,22 +16,16 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static('public'))
 
-// Setup the Mux SDK
-const Mux = require('@mux/mux-node')
-const { Video } = new Mux(process.env.MUX_TOKEN_ID, process.env.MUX_TOKEN_SECRET)
-let STREAM
-
-// Storage Configuration
-
+// storage configuration
 const stateFilePath = './.data/stream'
 
-// Authentication Configuration
+// authentication configuration
 const webhookUser = {
   name: 'muxer',
   pass: 'muxology',
 }
 
-// Authentication Middleware
+// authentication middleware
 const auth = (req, res, next) => {
   function unauthorized(res) {
       res.set('WWW-Authenticate', 'Basic realm=Authorization Required')
@@ -43,14 +42,14 @@ const auth = (req, res, next) => {
   }
 }
 
-// Creates a new Live Stream so we can get a Stream Key
+// creates a new live stream so we can get a stream key
 const createLiveStream = async () => {
   if (!process.env.MUX_TOKEN_ID || !process.env.MUX_TOKEN_SECRET) {
     console.error("It looks like you haven't set up your Mux token in the .env file yet.")
     return
   }
 
-  // Create a new Live Stream!
+  // create a new live stream!
   return await Video.LiveStreams.create({
     test: true,
     playback_policy: 'public',
@@ -59,9 +58,8 @@ const createLiveStream = async () => {
   })
 }
 
-// Reads a state file looking for an existing Live Stream, if it can't find one, 
-// creates a new one, saving the new live stream to our state file and global
-// STREAM variable.
+// reads a state file looking for an existing live stream, if it can't find one, 
+// creates a new one, saving the new live stream to our state file and global stream variable.
 const initialize = async () => {
   try {
     const stateFile = await fs.readFile(stateFilePath, 'utf8')
@@ -76,64 +74,79 @@ const initialize = async () => {
   return STREAM
 }
 
-// Lazy way to find a public playback ID (Just returns the first...)
+// lazy way to find a public playback id (just returns the first...)
 const getPlaybackId = stream => stream['playback_ids'][0].id
 
-// Gets a trimmed public stream details from a stream for use on the client side
+// let's pass only useful stream info
 const publicStreamDetails = stream => ({
   status: stream.status,
   playbackId: getPlaybackId(stream),
 })
 
-io.on('connection', (socket) => {
-  console.log('a user connected')
 
-  socket.on('disconnect', () => {
-    console.log('user disconnected')
+// setup db
+const adapter = new FileAsync('db.json')
+
+// -- wrap low.db around endpoints
+db(adapter)
+  .then(db => {
+    // -- /posts
+    app.get('/posts', async(req, res) => {
+      const posts = db.get('posts')
+      res.send(posts)
+    })
+
+    // -- socket.io
+    io.on('connection', (socket) => {
+      console.log('a user connected')
+
+      socket.on('disconnect', () => {
+        console.log('user disconnected')
+      })
+
+      socket.on('chat-msg', (msg) => {
+        console.log('msg', msg)
+        io.emit('chat-msg', msg)
+
+        db.get('posts')
+          .push(msg)
+          .last()
+          .write()
+      })
+
+      return db.defaults({posts: [] }).write()
+    })
+
+    // -- /stream, bootstrap the live-stream
+    app.get('/stream', async (req, res) => {
+      const stream = await Video.LiveStreams.get(STREAM.id)
+      res.json(
+        publicStreamDetails(stream)
+      )
+    })
+
+    // -- mux-hook, listen to mux callbacks
+    app.post('/mux-hook', auth, function (req, res) {
+      STREAM.status = req.body.data.status
+      
+      switch (req.body.type) {
+      case 'video.live_stream.idle':
+        io.emit('stream_update', publicStreamDetails(STREAM))
+
+        // when a live stream is active or idle, we want to push a new event down our
+        // web socket connection to our frontend, so that it update and display or hide
+        // the live stream.
+      case 'video.live_stream.active':
+        io.emit('stream_update', publicStreamDetails(STREAM))
+        break
+      default:
+      }
+
+      res.status(200).send('mux-hook, working')
+    })
   })
 
-  socket.on('chat-msg', (msg) => {
-    console.log('msg', msg)
-    io.emit('chat-msg', msg)
-  })
-
-})
-
-// API for getting the current live stream and its state for bootstrapping the app
-app.get('/stream', async (req, res) => {
-  const stream = await Video.LiveStreams.get(STREAM.id)
-  res.json(
-    publicStreamDetails(stream)
-  )
-})
-
-// API which Listens for callbacks from Mux
-app.post('/mux-hook', auth, function (req, res) {
-  STREAM.status = req.body.data.status
-  
-  switch (req.body.type) {
-    // When a stream goes idle, we want to capture the automatically created 
-    // asset IDs, so we can let people watch the on-demand copies of our live streams
-    case 'video.live_stream.idle':
-      io.emit('stream_update', publicStreamDetails(STREAM))
-      // STREAM['recent_asset_ids'] = req.body.data['recent_asset_ids']
-      // We deliberately don't break here
-
-    // When a Live Stream is active or idle, we want to push a new event down our
-    // web socket connection to our frontend, so that it update and display or hide
-    // the live stream.
-    case 'video.live_stream.active':
-      io.emit('stream_update', publicStreamDetails(STREAM))
-      break
-    default:
-      // Relaxing.
-  }
-
-  res.status(200).send('mux-hook, working')
-})
-
-// Starts the HTTP listener for our application.
-// Note: glitch helpfully remaps HTTP 80 and 443 to process.env.PORT
+// -- start
 initialize().then((stream) => {
   const listener = http.listen(process.env.PORT || 4000, function() {
     console.log('Your app is listening on port ' + listener.address().port)
