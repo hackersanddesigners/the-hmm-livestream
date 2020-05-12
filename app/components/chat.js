@@ -21,7 +21,7 @@ class chat extends nc {
       <div>
         ${storage()}
         <h3>chat</h3>
-        <div>${msgList(state.components.chat.msgList)}</div>
+        <div>${msgList(state.components.chat.posts)}</div>
         <form onsubmit=${onsubmit} method="post">
           ${setUsername(state)}
           <input class="msg" type="text">
@@ -65,7 +65,7 @@ class chat extends nc {
       let username = localStorage.getItem('username')
       console.log(username)
       
-      if (form[0].value !== '' && username === null) {
+      if (form[0].value !== '') {
         localStorage.setItem('username', form[0].value)
         state.components.chat.username = form[0].value
       } else {

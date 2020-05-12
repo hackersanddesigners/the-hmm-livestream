@@ -10,24 +10,31 @@ function stream (state, emitter) {
 
   state.components.chat = {
     username: undefined,
-    msgList: []
+    posts: []
   }
 
-  // console.log('socket =>', socket)
-
   emitter.on('DOMContentLoaded', async() => {
-    const response = await fetch('/stream')
-    if (response.ok) {
-      const data = await response.json()
+    const stream = await fetch('/stream')
+    if (stream.ok) {
+      const data = await stream.json()
       state.components.video.stream = data
       emitter.emit('render')
     } else {
-      return response.status
+      return stream.status
+    }
+
+    const posts = await fetch('/posts')
+    if (posts.ok) {
+      const data = await posts.json()
+      state.components.chat.posts = data
+      emitter.emit('render')
+    } else {
+      return posts.status
     }
   })
 
   socket.on('chat-msg', (msg) => {
-    state.components.chat.msgList.push(msg)
+    state.components.chat.posts.push(msg)
     emitter.emit('render')
   })
 
