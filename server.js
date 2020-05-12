@@ -84,6 +84,19 @@ const publicStreamDetails = stream => ({
   status: stream.status,
   playbackId: getPlaybackId(stream),
 })
+
+io.on('connection', (socket) => {
+  console.log('a user connected')
+
+  socket.on('disconnect', () => {
+    console.log('user disconnected')
+  })
+
+  socket.on('chat-msg', (msg) => {
+    console.log('msg', msg)
+    io.emit('chat-msg', msg)
+  })
+
 })
 
 // API for getting the current live stream and its state for bootstrapping the app
