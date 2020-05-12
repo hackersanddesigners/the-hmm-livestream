@@ -9,6 +9,7 @@ function stream (state, emitter) {
   } 
 
   state.components.chat = {
+    username: undefined,
     msgList: []
   }
 

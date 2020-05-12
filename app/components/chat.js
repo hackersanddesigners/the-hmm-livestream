@@ -21,20 +21,31 @@ class chat extends nc {
       <div>
         ${storage()}
         <h3>chat</h3>
-        <div style="border: 1px solid blue">${msgList(state.components.chat.msgList)}</div>
+        <div>${msgList(state.components.chat.msgList)}</div>
         <form onsubmit=${onsubmit} method="post">
-          <label>Pick a username</label><input class="username" type="text">
+          ${setUsername(state)}
           <input class="msg" type="text">
           <input type="submit" value="Send" class="send fs1 tdu curp">
         </form>
       </div> 
     `
 
+    function setUsername (state) {
+      if (state.components.chat.username === undefined) {
+        return html`
+          <div class="">
+            <label>Pick a username</label>
+            <input class="username" type="text">
+          </div>
+        `
+      }
+    }
+
     function msgList (data) {
       if (data.length > 0) {
         return data.map(msg => {
           return html`
-            <div>
+            <div style="border: 1px solid blue">
               <p>${msg.timestamp} ${msg.username}</p>
               <p>${msg.value}</p>
             </div>
@@ -51,25 +62,25 @@ class chat extends nc {
       e.preventDefault()
       const form = e.currentTarget
 
-      if (form[0].value !== '') { 
-      let username = JSON.parse(localStorage.getItem('username'))
-      if (username !== null) {
-        localStorage.removeItem('username') 
+      let username = localStorage.getItem('username')
+      console.log(username)
+      
+      if (form[0].value !== '' && username === null) {
+        localStorage.setItem('username', form[0].value)
+        state.components.chat.username = form[0].value
       } else {
-        localStorage.setItem('username', JSON.stringify(form[0].value))
-        state.components.login = user
+        state.components.chat.username = username
       }
 
       const msg = {
         timestamp: new Date(),
-        username: form[0].value,
+        username: state.components.chat.username,
         value: form[1].value
       }
 
       socket.emit('chat-msg', msg)
       form[0].value = ''
       form[1].value = ''
-      return false
     }
 
 
