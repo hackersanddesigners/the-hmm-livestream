@@ -85,7 +85,7 @@ const publicStreamDetails = stream => ({
 
 
 // setup db
-const adapter = new FileAsync('./data/db.json')
+const adapter = new FileAsync('./.data/db.json')
 
 // -- wrap low.db around endpoints
 db(adapter)
@@ -94,7 +94,7 @@ db(adapter)
     app.get('/posts', async(req, res) => {
       const posts = db.get('posts')
       res.send(posts)
-    })
+    }) 
 
     // -- socket.io
     io.on('connection', (socket) => {
@@ -116,35 +116,36 @@ db(adapter)
 
       return db.defaults({posts: [] }).write()
     })
-
-    // -- /stream, bootstrap the live-stream
-    app.get('/stream', async (req, res) => {
-      const stream = await Video.LiveStreams.get(STREAM.id)
-      res.json(
-        publicStreamDetails(stream)
-      )
-    })
-
-    // -- mux-hook, listen to mux callbacks
-    app.post('/mux-hook', auth, function (req, res) {
-      STREAM.status = req.body.data.status
-      
-      switch (req.body.type) {
-      case 'video.live_stream.idle':
-        io.emit('stream_update', publicStreamDetails(STREAM))
-
-        // when a live stream is active or idle, we want to push a new event down our
-        // web socket connection to our frontend, so that it update and display or hide
-        // the live stream.
-      case 'video.live_stream.active':
-        io.emit('stream_update', publicStreamDetails(STREAM))
-        break
-      default:
-      }
-
-      res.status(200).send('mux-hook, working')
-    })
+    
   })
+
+// -- /stream, bootstrap the live-stream
+app.get('/stream', async (req, res) => {
+  const stream = await Video.LiveStreams.get(STREAM.id)
+  res.json(
+    publicStreamDetails(stream)
+  )
+})
+
+// -- mux-hook, listen to mux callbacks
+app.post('/mux-hook', auth, function (req, res) {
+  STREAM.status = req.body.data.status
+  
+  switch (req.body.type) {
+  case 'video.live_stream.idle':
+    io.emit('stream_update', publicStreamDetails(STREAM))
+
+    // when a live stream is active or idle, we want to push a new event down our
+    // web socket connection to our frontend, so that it update and display or hide
+    // the live stream.
+  case 'video.live_stream.active':
+    io.emit('stream_update', publicStreamDetails(STREAM))
+    break
+  default:
+  }
+
+  res.status(200).send('mux-hook, working')
+})
 
 // -- start
 initialize().then((stream) => {
