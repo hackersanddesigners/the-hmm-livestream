@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "watchify --ignore-missing index.js -o ../public/bundle.js --debug --verbose -t sheetify -p [ css-extract -o ../public/bundle.css ] index.js",
-    "build": "browserify --ignore-missing index.js -o ../public/bundle.js --debug -t yo-yoify -t  [ sheetify -u sheetify-cssnext ] -p [ css-extract -o ../public/bundle.css ] -p tinyify",
-    "deploy": "browserify --ignore-missing index.js -o ../public/bundle.js -t yo-yoify -t  [ sheetify -u sheetify-cssnext ] -p [ css-extract -o ../public/bundle.css ] -p tinyify"
+    "start": "watchify --ignore-missing index.js -o ../public/assets/bundle.js --debug --verbose -t sheetify -p [ css-extract -o ../public/assets/bundle.css ] index.js",
+    "build": "browserify --ignore-missing index.js -o ../public/assets/bundle.js --debug -t yo-yoify -t  [ sheetify -u sheetify-cssnext ] -p [ css-extract -o ../public/assets/bundle.css ] -p tinyify",
+    "deploy": "browserify --ignore-missing index.js -o ../public/assets/bundle.js -t yo-yoify -t  [ sheetify -u sheetify-cssnext ] -p [ css-extract -o ../public/assets/bundle.css ] -p tinyify"
   },
   "author": "",
   "license": "ISC",
