@@ -21,8 +21,9 @@ class chat extends nc {
       <div class="${state.components.chat.toggle ? 'x xdc h100' : 'dn'}">
         ${storage()}
         <div class="p0-5 h100 oys">
-          <div>${msgList(state.components.chat.posts)}</div>
+          <div class="chat-list">${msgList(state.components.chat.posts)}</div>
         </div>
+
         <form onsubmit=${onsubmit} method="post" class="p0-5 bt-wh bgc-bl">
           ${setUsername(state)}
           <input required class="message w100" type="text" placeholder="Type here to send a message">
@@ -54,7 +55,6 @@ class chat extends nc {
         date: date
       }
     }
-    
 
     function msgList (data) {
       if (data.length > 0) {
@@ -71,6 +71,7 @@ class chat extends nc {
           <div><p>no message yet</p></div>
         `
       }
+
     }
 
     function onsubmit (e) {
@@ -135,6 +136,12 @@ class chat extends nc {
 
   update () {
     return true
+  }
+
+  afterupdate(el) {
+    let chatList = el.querySelector('.chat-list')
+    chatList.scrollTop = 50
+    // console.log(chatList.scrollTop, chatList.scrollHeight)
   }
 }
 
