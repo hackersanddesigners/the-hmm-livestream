@@ -2,6 +2,7 @@ const io = require('socket.io-client')
 const socket = io()
 
 function stream (state, emitter) {
+  state.components.socket = socket
   state.components.video = {
     stream: null,
     controls: false,

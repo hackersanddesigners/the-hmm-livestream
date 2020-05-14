@@ -1,7 +1,5 @@
 const html = require('choo/html')
 const nc = require('nanocomponent')
-const io = require('socket.io-client')
-const socket = io()
 
 class chat extends nc {
   constructor (state, emit) {
@@ -97,7 +95,7 @@ class chat extends nc {
         value: input_message.value
       }
 
-      socket.emit('chat-msg', msg)
+      state.components.socket.emit('chat-msg', msg)
     }
 
 
