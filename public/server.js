@@ -1,7 +1,7 @@
 require('dotenv').config()
 const fs = require('fs').promises
+const path = require('path')
 const express = require('express')
-const bodyParser = require('body-parser')
 const basicAuth = require('basic-auth')
 const app = express()
 const Mux = require('@mux/mux-node')
@@ -12,9 +12,14 @@ const FileAsync = require('lowdb/adapters/FileAsync')
 const http = require('http').Server(app)
 const io = require('socket.io')(http)
 
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
-app.use(express.static('public'))
+// serve index.html with choo app
+app.get('/', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'index.html'))
+})
+
+app.use('/assets', express.static(path.resolve(__dirname, 'assets')))
+
+app.use(express.json())
 
 // storage configuration
 const stateFilePath = './.data/stream'
