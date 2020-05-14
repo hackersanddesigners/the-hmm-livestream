@@ -10,7 +10,7 @@ let STREAM
 const db = require('lowdb')
 const FileAsync = require('lowdb/adapters/FileAsync')
 const http = require('http').Server(app)
-const io = require('socket.io')(http)
+const socket = require('socket.io')(http)
 
 // serve index.html with choo app
 app.get('/', (req, res) => {
@@ -102,16 +102,16 @@ db(adapter)
     }) 
 
     // -- socket.io
-    io.on('connection', (socket) => {
+    socket.on('connection', (sock) => {
       console.log('a user connected')
 
       socket.on('disconnect', () => {
         console.log('user disconnected')
       })
 
-      socket.on('chat-msg', (msg) => {
+      sock.on('chat-msg', (msg) => {
         console.log('msg', msg)
-        io.emit('chat-msg', msg)
+        socket.emit('chat-msg', msg)
 
         db.get('posts')
           .push(msg)
@@ -138,13 +138,13 @@ app.post('/mux-hook', auth, function (req, res) {
   
   switch (req.body.type) {
   case 'video.live_stream.idle':
-    io.emit('stream_update', publicStreamDetails(STREAM))
+    socket.emit('stream_update', publicStreamDetails(STREAM))
 
     // when a live stream is active or idle, we want to push a new event down our
     // web socket connection to our frontend, so that it update and display or hide
     // the live stream.
   case 'video.live_stream.active':
-    io.emit('stream_update', publicStreamDetails(STREAM))
+    socket.emit('stream_update', publicStreamDetails(STREAM))
     break
   default:
   }
