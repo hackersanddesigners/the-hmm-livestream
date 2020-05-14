@@ -103,10 +103,14 @@ db(adapter)
 
     // -- socket.io
     socket.on('connection', (sock) => {
-      console.log('a user connected')
+      const userCount = sock.client.conn.server.clientsCount
+      console.log('a user connected, total user', userCount)
 
-      socket.on('disconnect', () => {
-        console.log('user disconnected')
+      socket.emit('user-count',  userCount / 2)
+
+      sock.on('disconnect', () => {
+        console.log('user disconnected, total user', userCount)
+        socket.emit('user-count',  userCount / 2)
       })
 
       sock.on('chat-msg', (msg) => {
@@ -138,13 +142,13 @@ app.post('/mux-hook', auth, function (req, res) {
   
   switch (req.body.type) {
   case 'video.live_stream.idle':
-    socket.emit('stream_update', publicStreamDetails(STREAM))
+    // socket.emit('stream_update', publicStreamDetails(STREAM))
 
     // when a live stream is active or idle, we want to push a new event down our
     // web socket connection to our frontend, so that it update and display or hide
     // the live stream.
   case 'video.live_stream.active':
-    socket.emit('stream_update', publicStreamDetails(STREAM))
+    // socket.emit('stream_update', publicStreamDetails(STREAM))
     break
   default:
   }

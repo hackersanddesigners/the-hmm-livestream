@@ -54,8 +54,9 @@ function view (state, emit) {
   }
 
   function viewers (state, emit) {
+    const count = state.components.chat.userCount
     return html`
-      <p># viewers</p>
+      <p>${count} viewers</p>
     `
   }
 

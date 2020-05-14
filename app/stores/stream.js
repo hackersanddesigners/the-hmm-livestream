@@ -11,7 +11,8 @@ function stream (state, emitter) {
   state.components.chat = {
     toggle: false,
     username: undefined,
-    posts: []
+    posts: [],
+    userCount: 0
   }
 
   emitter.on('DOMContentLoaded', async() => {
@@ -45,14 +46,20 @@ function stream (state, emitter) {
     emitter.emit('render')
   })
 
-  socket.on('stream_update', (stream) => {
-    console.log('ss', stream)
-    if (stream.status === 'idle') {
-      console.log(stream, stream.status)
-      state.components.video.stream = stream
-      emitter.emit('render')
-    }
+  socket.on('user-count', (count) => {
+    console.log('user-count', count)
+    state.components.chat.userCount = count
+    emitter.emit('render')
   })
+
+  // socket.on('stream_update', (stream) => {
+  //   console.log('ss', stream)
+  //   if (stream.status === 'idle') {
+  //     console.log(stream, stream.status)
+  //     state.components.video.stream = stream
+  //     emitter.emit('render')
+  //   }
+  // })
 
   emitter.on('toggle-video', () => {
     console.log('hi!')
