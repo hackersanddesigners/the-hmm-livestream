@@ -40,6 +40,7 @@ function stream (state, emitter) {
   })
 
   socket.on('chat-msg', (msg) => {
+    console.log('chat-msg', msg)
     state.components.chat.posts.push(msg)
     emitter.emit('render')
   })
