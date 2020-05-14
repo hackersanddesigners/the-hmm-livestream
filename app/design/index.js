@@ -79,6 +79,5 @@ var utils = gr8({
 })
 
 var utilcss = root + basic + utils
-console.log(utilcss)
 
 module.exports = utilcss
