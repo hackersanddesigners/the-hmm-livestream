@@ -1,17 +1,21 @@
 {
-  "name": "moving-bodies-stream",
-  "version": "1.0",
-  "description": "yo",
+  "name": "hd-x-thehmm",
+  "version": "1.0.0",
+  "description": "",
   "main": "server.js",
   "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
+  "author": "",
+  "license": "ISC",
   "dependencies": {
-    "@mux/mux-node": "^2.0.0",
+    "@mux/mux-node": "^2.8.0",
     "basic-auth": "^2.0.1",
+    "body-parser": "^1.19.0",
     "dotenv": "^8.2.0",
-    "express": "^4.16.3",
+    "express": "^4.17.1",
     "lowdb": "^1.0.0",
-    "socket.io": "^2.2.0"
+    "socket.io": "^2.3.0"
   }
 }
