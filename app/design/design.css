@@ -44,7 +44,7 @@ html {
   width: 100%;
   box-sizing: border-box;
   font-size: 18px;
-  line-height: 1.2;
+  line-height: 1.1;
   font-family: var(--ft-ss);
   color: var(--c-bk);
 }
