@@ -60,20 +60,17 @@ function view (state, emit) {
   }
 
   function content (state, emit) {
-    if (state.components.video.stream !== null) {
-      const video = state.components.video
-      // <p>${video.stream.status || 'status...'}</p>
-      return html`
-        <main class="x xdc">
-          ${stripe('The Hmm @ Hackers & Designers')}
-          <div class="psr">
-            ${videoPlayer.render(state, emit, video)}
-            ${chatBox(state, emit)}
-          </div>
-          ${stripe('The Hmm @ Hackers & Designers')} 
-        </main>
-      `
-    }
+    const video = state.components.video
+    return html`
+      <main class="x xdc">
+        ${stripe('The Hmm @ Hackers & Designers', 10, 'top')}
+        <div class="psr">
+          ${videoPlayer.render(state, emit, video)}
+          ${chatBox(state, emit)}
+        </div>
+        ${stripe('The Hmm @ Hackers & Designers', 10, 'bottom')} 
+      </main>
+    `
   }
 
 }

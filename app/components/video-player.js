@@ -16,10 +16,8 @@ class videoPlayer extends nc {
     this.emit = emit
     this.data = data
 
-    const srcUrl = `https://stream.mux.com/${data.stream.playbackId}.m3u8`
-
     return html`
-      <video src=${srcUrl} controls=${state.components.video.controls} muted=${state.components.video.muted} class="db w100 bgc-bk"> 
+      <video src="" controls=${state.components.video.controls} muted=${state.components.video.muted} class="db w100 bgc-bk"> 
     `
   }
 
