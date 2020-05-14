@@ -25,12 +25,12 @@ function view (state, emit) {
     </body>
   `
 
-  function stripe (string) {
-    const filler = Array.from(string.repeat(15))
+  function stripe (string, n, side) {
+    const filler = Array.from(string.repeat(n))
     const fillText = filler.map(text => html`<p>${text}</p>`)
 
     return html`
-      <div class="x xdr bgc-yl oxh">${fillText}</div>
+      <div class="z1 py0-25 x xdr bgc-yl oxh ${side === 'top' ? 'bsh-t' : 'bsh-b' }">${fillText}</div>
     `
   }
 

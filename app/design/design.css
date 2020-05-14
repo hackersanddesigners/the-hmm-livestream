@@ -75,3 +75,11 @@ strong, b {
 .l-999 {
   left: -999px;
 }
+
+.bsh-t {
+  box-shadow: 0 -1em 1em rgba(0,0,0,0.3)
+}
+
+.bsh-b {
+  box-shadow: 0 1em 1em rgba(0,0,0,0.3)
+}
