@@ -105,12 +105,11 @@ db(adapter)
     socket.on('connection', (sock) => {
       const userCount = sock.client.conn.server.clientsCount
       console.log('a user connected, total user', userCount)
-
-      socket.emit('user-count',  userCount / 2)
+      socket.emit('user-count',  userCount)
 
       sock.on('disconnect', () => {
-        console.log('user disconnected, total user', userCount)
-        socket.emit('user-count',  userCount / 2)
+        console.log('a user disconnected, total user', userCount -1)
+        socket.emit('user-count',  userCount -1)
       })
 
       sock.on('chat-msg', (msg) => {
