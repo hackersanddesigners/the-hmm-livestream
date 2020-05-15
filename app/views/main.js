@@ -4,6 +4,8 @@ const VideoPlayer = require('../components/video-player')
 const videoPlayer = new VideoPlayer()
 const Chat = require('../components/chat')
 const chat = new Chat()
+const Donate = require('../components/donate')
+const donate = new Donate()
 
 function view (state, emit) {
   console.log(state)
@@ -19,7 +21,7 @@ function view (state, emit) {
       </header>
       ${content(state, emit)} 
       <footer class="p1 x xdr xw xjb">
-         ${donate(state, emit)}
+         ${donate.render(state, emit)}
          ${viewers(state, emit)}
        </div>
     </body>
@@ -45,13 +47,7 @@ function view (state, emit) {
     function toggleBox (emit) {
       return () => { emit('chat-toggle') }
     }
-  }
-
-  function donate (state, emit) {
-    return html`
-      <button>Donate</button>
-    `
-  }
+  } 
 
   function viewers (state, emit) {
     const count = state.components.chat.userCount

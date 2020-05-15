@@ -11,6 +11,8 @@ const db = require('lowdb')
 const FileAsync = require('lowdb/adapters/FileAsync')
 const http = require('http').Server(app)
 const socket = require('socket.io')(http)
+const { createMollieClient } = require('@mollie/api-client');
+const mollieClient = createMollieClient({ apiKey: process.env.MOLLIE });
 
 // serve index.html with choo app
 app.get('/', (req, res) => {
@@ -154,6 +156,32 @@ app.post('/mux-hook', auth, function (req, res) {
 
   res.status(200).send('mux-hook, working')
 })
+
+app.post('/donate', async (req, res) => {
+  let data = req.body
+  console.log('data =>', data)
+  ;
+  (async () => {
+    try {
+      const payment = await mollieClient.payments.create({
+        amount: {
+          currency: 'EUR',
+          value: data.amount, // We enforce the correct number of decimals through strings
+        },
+        description: data.description,
+        redirectUrl: 'https://live.hackersanddesigners.nl',
+        // webhookUrl: 'https://live.hackersanddesigners.nl/donate/webhook/',
+      })
+      payment.getCheckoutUrl()
+      console.log(payment)
+      res.send(payment)
+    } catch (error) {
+      console.warn(error)
+      res.send(error)
+    }
+  })();
+})
+
 
 // -- start
 initialize().then((stream) => {

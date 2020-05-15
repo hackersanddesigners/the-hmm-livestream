@@ -16,6 +16,10 @@ function stream (state, emitter) {
     userCount: 0
   }
 
+  state.components.donate = {
+    toggle: false
+  }
+
   emitter.on('DOMContentLoaded', async() => {
     const stream = await fetch('/stream')
     if (stream.ok) {
@@ -66,6 +70,11 @@ function stream (state, emitter) {
     console.log('hi!')
     state.components.video.controls =! state.components.video.controls
     state.components.video.muted =! state.components.video.muted
+    emitter.emit('render')
+  })
+
+  emitter.on('donate-toggle', () => {
+    state.components.donate.toggle =! state.components.donate.toggle
     emitter.emit('render')
   })
 
