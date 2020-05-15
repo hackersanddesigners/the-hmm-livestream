@@ -83,3 +83,7 @@ strong, b {
 .bsh-b {
   box-shadow: 0 1em 1em rgba(0,0,0,0.3)
 }
+
+.btlr {
+  border-top-left-radius: 1.5rem;
+}

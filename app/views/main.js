@@ -36,7 +36,7 @@ function view (state, emit) {
 
   function chatBox () {
     return html`
-      <div class="c4 psa b0 r0 bgc-bl fc-wh ${state.components.chat.toggle ? 'h100' : 'tac b-wh'}">
+      <div class="c4 psa b0 r0 btlr bgc-bl fc-wh b-wh ${state.components.chat.toggle ? 'h100' : 'tac'}">
         <button onclick=${toggleBox(emit)} type="button" class="ft-ms curp${state.components.chat.toggle ? ' psa t0 r0 pt0-25 px0-5' : ' py1 w100'}">${state.components.chat.toggle ? ' x' : 'Chat'}</button>
         ${chat.render(state, emit, {})}
       </div>

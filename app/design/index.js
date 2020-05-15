@@ -64,6 +64,7 @@ var border = {
   vals: [
     { n: 'none' },
     { wh: '1px solid var(--c-wh)' },
+    { bk: '1px solid var(--c-bk)' }
   ],
   join: '-'
 }
