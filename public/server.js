@@ -35,17 +35,18 @@ const webhookUser = {
 // authentication middleware
 const auth = (req, res, next) => {
   function unauthorized(res) {
-      res.set('WWW-Authenticate', 'Basic realm=Authorization Required')
-      return res.send(401)
+    res.set('WWW-Authenticate', 'Basic realm=Authorization Required')
+    return res.sendStatus(401)
   }
   const user = basicAuth(req)
+  console.log(user)
   if (!user || !user.name || !user.pass) {
-      return unauthorized(res)
+    return unauthorized(res)
   }
   if (user.name === webhookUser.name && user.pass === webhookUser.pass) {
-      return next()
+    return next()
   } else {
-      return unauthorized(res)
+    return unauthorized(res)
   }
 }
 
@@ -138,23 +139,16 @@ app.get('/stream', async (req, res) => {
 })
 
 // -- mux-hook, listen to mux callbacks
-app.post('/mux-hook', auth, function (req, res) {
+// auth, 
+app.post('/mux-hook', function (req, res) {
+  console.log('mux-hook =>', req.body)
   STREAM.status = req.body.data.status
   
-  switch (req.body.type) {
-  case 'video.live_stream.idle':
-    // socket.emit('stream_update', publicStreamDetails(STREAM))
-
-    // when a live stream is active or idle, we want to push a new event down our
-    // web socket connection to our frontend, so that it update and display or hide
-    // the live stream.
-  case 'video.live_stream.active':
-    // socket.emit('stream_update', publicStreamDetails(STREAM))
-    break
-  default:
+  if (req.body.type === 'video.live_stream.idle' || req.body.type === 'video.live_stream.active') {
+    socket.emit('stream-update', publicStreamDetails(STREAM))
   }
 
-  res.status(200).send('mux-hook, working')
+  res.sendStatus(200)
 })
 
 app.post('/donate', async (req, res) => {

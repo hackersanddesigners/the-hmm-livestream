@@ -61,13 +61,30 @@ function view (state, emit) {
     return html`
       <main class="x xdc">
         ${stripe('The Hmm @ Hackers & Designers', 10, 'top')}
-        <div class="psr">
-          ${videoPlayer.render(state, emit, video)}
-          ${chatBox(state, emit)}
-        </div>
+        ${videoBlock(video)} 
         ${stripe('The Hmm @ Hackers & Designers', 10, 'bottom')} 
       </main>
     `
+  }
+
+  function videoBlock (video) {
+    if (video.stream !== null) {
+      return html`
+        <div class="psr video-ar bgc-bk">
+          <div class="psa t0 l0 bgc-wh p0-15">status: ${state.components.video.stream !== null ? state.components.video.stream.status : '...'}</div>
+          ${videoPlayer.render(state, emit, video)}
+          ${chatBox(state, emit)}
+        </div>
+      `
+    } else {
+      return html`
+        <div class="psr video-ar bgc-bk">
+          <div class="psa t0 l0 bgc-wh p0-15">status: ${state.components.video.stream !== null ? state.components.video.stream.status : '...'}</div>
+          <div></div>
+          ${chatBox(state, emit)}
+        </div>
+      `
+    }
   }
 
 }

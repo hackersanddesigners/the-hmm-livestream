@@ -25,6 +25,11 @@ function stream (state, emitter) {
     if (stream.ok) {
       const data = await stream.json()
       state.components.video.stream = data
+
+      if (data.status === 'active') {
+        state.components.video.controls = true
+      }
+      
       emitter.emit('render')
     } else {
       return stream.status
@@ -52,22 +57,18 @@ function stream (state, emitter) {
   })
 
   socket.on('user-count', (count) => {
-    console.log('user-count', count)
     state.components.chat.userCount = count
     emitter.emit('render')
   })
 
-  // socket.on('stream_update', (stream) => {
-  //   console.log('ss', stream)
-  //   if (stream.status === 'idle') {
-  //     console.log(stream, stream.status)
-  //     state.components.video.stream = stream
-  //     emitter.emit('render')
-  //   }
-  // })
+  socket.on('stream-update', (stream) => {
+    state.components.video.controls =! state.components.video.controls
+    state.components.video.stream = stream
+    emitter.emit('render')
+  })
 
   emitter.on('toggle-video', () => {
-    console.log('hi!')
+    console.log('video-toggled')
     state.components.video.controls =! state.components.video.controls
     state.components.video.muted =! state.components.video.muted
     emitter.emit('render')

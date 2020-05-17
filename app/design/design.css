@@ -87,3 +87,10 @@ strong, b {
 .btlr {
   border-top-left-radius: 1.5rem;
 }
+
+.video-ar {
+  width: 100%;
+  height: 0;
+  overflow: hidden;
+  padding-top: calc((5 / 8) * 100%);
+}
