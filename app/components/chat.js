@@ -80,7 +80,6 @@ class chat extends nc {
       const input_message = form.querySelector('.message')
 
       let username = localStorage.getItem('username')
-      console.log(username)
       
       if (input_username !== null) {
         localStorage.setItem('username', input_username.value)
