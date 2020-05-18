@@ -65,7 +65,7 @@ function view (state, emit) {
     if (video.stream !== null) {
       return html`
         <div class="psr video-ar bgc-bk">
-          <div class="psa t0 l0 bgc-wh p0-15">status: ${state.components.video.stream !== null ? state.components.video.stream.status : '...'}</div>
+          <div class="z2 psa t0 l0 bgc-wh p0-15">status:  ${video.stream.status}</div>
           ${videoPlayer.render(state, emit, video)}
           ${chatBox(state, emit)}
         </div>
@@ -73,7 +73,7 @@ function view (state, emit) {
     } else {
       return html`
         <div class="psr video-ar bgc-bk">
-          <div class="psa t0 l0 bgc-wh p0-15">status: ${state.components.video.stream !== null ? state.components.video.stream.status : '...'}</div>
+          <div class="psa t0 l0 bgc-wh p0-15">status: ...</div>
           <div></div>
           ${chatBox(state, emit)}
         </div>
