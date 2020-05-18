@@ -6,6 +6,7 @@ const Chat = require('../components/chat')
 const chat = new Chat()
 const Donate = require('../components/donate')
 const donate = new Donate()
+const Ticker = require('../components/ticker')
 
 function view (state, emit) {
   console.log(state)
@@ -25,16 +26,7 @@ function view (state, emit) {
          ${viewers(state, emit)}
        </div>
     </body>
-  `
-
-  function stripe (string, n, side) {
-    const filler = Array.from(string.repeat(n))
-    const fillText = filler.map(text => html`<p>${text}</p>`)
-
-    return html`
-      <div class="z1 py0-25 x xdr bgc-yl oxh ${side === 'top' ? 'bsh-t' : 'bsh-b' }">${fillText}</div>
-    `
-  }
+  ` 
 
   function chatBox () {
     return html`
@@ -58,11 +50,13 @@ function view (state, emit) {
 
   function content (state, emit) {
     const video = state.components.video
+    const tickerT = state.cache(Ticker, '00-t')
+    const tickerB = state.cache(Ticker, '01-b')
     return html`
       <main class="x xdc">
-        ${stripe('The Hmm @ Hackers & Designers', 10, 'top')}
+        ${tickerT.render(state, emit, {string: 'The Hmm @ Hackers & Designers', n: 10, side: 'top'})}
         ${videoBlock(video)} 
-        ${stripe('The Hmm @ Hackers & Designers', 10, 'bottom')} 
+        ${tickerB.render(state, emit, {string: 'The Hmm @ Hackers & Designers', n: 10, side: 'bottom'})} 
       </main>
     `
   }

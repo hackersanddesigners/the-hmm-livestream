@@ -9,6 +9,8 @@ function stream (state, emitter) {
     muted: true
   } 
 
+  state.components.ticker = []
+
   state.components.chat = {
     toggle: false,
     username: undefined,
@@ -77,6 +79,18 @@ function stream (state, emitter) {
   emitter.on('donate-toggle', () => {
     state.components.donate.toggle =! state.components.donate.toggle
     emitter.emit('render')
+  })
+
+  emitter.on('ticker-toggle', (action) => {
+    state.components.ticker.forEach(ticker => {
+      if (action === 'play') {
+        ticker.pause()
+        emitter.emit('render')
+      } else if (action === 'pause') {
+        ticker.play()
+        emitter.emit('render')
+      }
+    })
   })
 
 }

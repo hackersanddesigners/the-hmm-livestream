@@ -17,8 +17,16 @@ class videoPlayer extends nc {
     this.data = data
     
     return html`
-      <video controls=${data.controls} class="psa t0 l0 b0 r0 w100 bgc-bk"> 
+      <video onplay=${onPlay(emit)} onpause=${onPause(emit)} controls=${data.controls} class="psa t0 l0 b0 r0 w100 bgc-bk"> 
     `
+
+    function onPlay(emit) {
+      return () => {emit('ticker-toggle', 'play')}
+    }
+
+    function onPause(emit) {
+      return () => {emit('ticker-toggle', 'pause')}
+    }
   }
 
   load () {

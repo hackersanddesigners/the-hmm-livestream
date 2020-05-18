@@ -21,6 +21,7 @@
     "nanocomponent": "^6.5.2",
     "sheetify": "^7.4.0",
     "sheetify-cssnext": "^2.0.1",
+    "smarquee": "^1.0.5",
     "socket.io-client": "^2.3.0",
     "tinyify": "^2.5.1",
     "watchify": "^3.11.1",
