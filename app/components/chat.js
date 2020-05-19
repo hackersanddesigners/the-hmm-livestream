@@ -15,12 +15,12 @@ class chat extends nc {
     this.emit = emit
     this.data = data
 
-    // <div class="${state.components.chat.toggle ? 'x xdc h100' : 'dn'}">
-
     return html`
-      <div class="${state.components.chat.toggle ? 'x xdc h100' : 'xdn x xdc h100'}">
+      <div class="${state.components.chat.toggle ? 'x xdc h100' : 'dn'}">
         ${storage()}
-        <div class="p0-5 chat-list">${msgList(state.components.chat.posts)}</div>
+        <div style="max-height: 20.5rem" class="chat-wrap p0-5 oys">
+          <div class="p0-5 chat-list">${msgList(state.components.chat.posts)}</div>
+        </div>
 
         <form onsubmit=${onsubmit} method="post" class="p0-5 bt-wh bgc-bl">
           ${setUsername(state)}
@@ -45,7 +45,6 @@ class chat extends nc {
       const tt_sp = tsp[1].split(':')
 
       const date = `${dt_sp[2]}.${dt_sp[1]}.${dt_sp[0]} ${tt_sp[0]}:${tt_sp[1]}`
-
       const iso = `${dt_sp[2]}.${dt_sp[1]}.${dt_sp[0]}T${tt_sp[0]}:${tt_sp[1]}`
 
       return {
@@ -131,14 +130,18 @@ class chat extends nc {
 
   }
 
+  load (el) {
+    const chatWrap = el.querySelector('.chat-wrap')
+    console.log(chatWrap)
+  }
+
   update () {
     return true
   }
 
   afterupdate(el) {
-    let chatList = el.querySelector('.chat-list')
-    const lastMsg = chatList.childNodes[chatList.childNodes.length -1]
-    lastMsg.scrollIntoView()
+    const chatList = el.querySelector('.chat-list')
+    chatList.scrollIntoView(false)
     console.log('SUBMIT!!')
   }
 }

@@ -30,7 +30,7 @@ function view (state, emit) {
 
   function chatBox (state, emit) {
     return html`
-      <div class="c4 psa b0 r0 btlr bgc-bl fc-wh b-wh ${state.components.chat.toggle ? 'h100 oys' : 'h100 oys tac'}">
+      <div class="c4 psa b0 r0 btlr bgc-bl fc-wh b-wh ${state.components.chat.toggle ? ' h100 oys' : 'tac'}">
         <button onclick=${toggleBox(emit)} type="button" class="ft-ms curp${state.components.chat.toggle ? ' psa t0 r0 pt0-25 px0-5' : ' py1 w100'}">${state.components.chat.toggle ? ' x' : 'Chat'}</button>
         ${chat.render(state, emit, {})}
       </div>
@@ -78,7 +78,6 @@ function view (state, emit) {
       return html`
         <div class="psr video-ar bgc-bk">
           <div class="psa t0 l0 bgc-wh p0-15">status: ...</div>
-          <div></div>
           <div class="c4 psa b0 r0 btlr bgc-bl fc-wh b-wh ${state.components.chat.toggle ? 'h100 oys' : 'tac'}">
             <button onclick=${toggleBox(emit)} type="button" class="ft-ms curp${state.components.chat.toggle ? ' psa t0 r0 pt0-25 px0-5' : ' py1 w100'}">${state.components.chat.toggle ? ' x' : 'Chat'}</button>
           </div>
