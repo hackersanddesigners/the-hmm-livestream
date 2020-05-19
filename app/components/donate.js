@@ -56,11 +56,10 @@ class donate extends nc {
       e.preventDefault()
       const form = e.currentTarget
       let data = new FormData(form)
+      const send = form.querySelector('.donate-send')
 
       let body = {}
       for (let pair of data.entries()) body[pair[0]] = pair[1]
-
-      const send = form.querySelector('.donate-send')
 
       if (body.website !== '') {
         return

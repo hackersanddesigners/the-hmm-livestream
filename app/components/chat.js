@@ -15,19 +15,19 @@ class chat extends nc {
     this.emit = emit
     this.data = data
 
+    // <div class="${state.components.chat.toggle ? 'x xdc h100' : 'dn'}">
+
     return html`
-      <div class="${state.components.chat.toggle ? 'x xdc h100' : 'dn'}">
+      <div class="${state.components.chat.toggle ? 'x xdc h100' : 'xdn x xdc h100'}">
         ${storage()}
-        <div class="p0-5 h100 oys">
-          <div class="chat-list">${msgList(state.components.chat.posts)}</div>
-        </div>
+        <div class="p0-5 chat-list">${msgList(state.components.chat.posts)}</div>
 
         <form onsubmit=${onsubmit} method="post" class="p0-5 bt-wh bgc-bl">
           ${setUsername(state)}
           <input required class="message w100" type="text" placeholder="Type here to send a message">
           <input class="psf t0 l-999" type="submit" value="Send">
         </form>
-      </div> 
+      </div>
     `
 
     function setUsername (state) {
@@ -137,8 +137,9 @@ class chat extends nc {
 
   afterupdate(el) {
     let chatList = el.querySelector('.chat-list')
-    chatList.scrollTop = 50
-    // console.log(chatList.scrollTop, chatList.scrollHeight)
+    const lastMsg = chatList.childNodes[chatList.childNodes.length -1]
+    lastMsg.scrollIntoView()
+    console.log('SUBMIT!!')
   }
 }
 
