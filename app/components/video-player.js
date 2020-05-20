@@ -17,7 +17,7 @@ class videoPlayer extends nc {
     this.data = data
     
     return html`
-      <video onplay=${onPlay(emit)} onpause=${onPause(emit)} controls=${data.controls} class="psa t0 l0 b0 r0 w100 bgc-bk"> 
+      <video onplay=${onPlay(emit)} onpause=${onPause(emit)} ${data.controls ? 'controls' : ''} class="psa t0 l0 b0 r0 w100 bgc-bk"> 
     `
 
     function onPlay(emit) {
@@ -33,6 +33,8 @@ class videoPlayer extends nc {
     const video = this.element
     const stream = this.data.stream
     const videoSrc = `https://stream.mux.com/${stream.playbackId}.m3u8`
+
+    console.log(videoSrc)
 
     if (Hls.isSupported()) {
       var hls = new Hls();
