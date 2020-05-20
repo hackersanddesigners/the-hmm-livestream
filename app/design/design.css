@@ -33,6 +33,7 @@ button {
   font-size: inherit;
   text-align: inherit;
   color: inherit;
+  outline: none;
 }
 
 html,
