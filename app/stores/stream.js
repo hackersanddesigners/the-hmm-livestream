@@ -81,6 +81,30 @@ function stream (state, emitter) {
     emitter.emit('render')
   })
 
+  emitter.on('donate', async(data) => {
+    const response = await fetch('/donate', {
+      method: 'POST',
+      mode: 'cors',
+      cache: 'no-cache',
+      credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' },
+      redirect: 'follow',
+      referrer: 'no-referrer',
+      body: JSON.stringify(data)
+    })
+
+    if (response.ok) {
+      const data = await response.json()
+
+      // redirect to checkout-url
+      window.location.href = data._links.checkout.href
+    } else {
+      return response.error
+    }
+
+    emitter.emit('render')
+  })
+
   emitter.on('ticker-toggle', (action) => {
     state.components.ticker.forEach(ticker => {
       if (action === 'play') {

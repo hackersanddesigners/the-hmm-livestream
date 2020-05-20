@@ -72,27 +72,8 @@ class donate extends nc {
             }
           }
         })[0]
-        console.log(data)
-        ;
-        (async () => {
-          const response = await fetch('/donate', {
-            method: 'POST',
-            mode: 'cors',
-            cache: 'no-cache',
-            credentials: 'same-origin',
-            headers: { 'Content-Type': 'application/json' },
-            redirect: 'follow',
-            referrer: 'no-referrer',
-            body: JSON.stringify(data)
-          })
-
-          if (response.ok) {
-            const data = await response.json()
-            return data
-          } else {
-            return response.error
-          }
-        })()
+        
+        emit('donate', data) 
       }
     }
   }
