@@ -8,9 +8,9 @@ const app = choo()
 app.use(devtools())
 
 app.use(require('./stores/stream'))
-// app.use(require('./stores/click'))
 
 app.route('/', require('./views/main'))
+app.route('/checkout', require('./views/checkout'))
 app.route('*', require('./views/notfound'))
 
 if (!module.parent) app.mount('body')
