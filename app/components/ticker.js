@@ -17,7 +17,7 @@ class ticker extends nc {
     this.data = data
 
     const filler = Array.from(Array(data.n).fill(data.string))
-    const fillText = filler.map(text => html`<span>${text}</span>`)
+    const fillText = filler.map(text => html`<span class="dbi pr0-25">${text}</span>`)
 
     return html`
       <div id="smarquee-${data.side}" class="z1 py0-25 bgc-yl ${data.side === 'top' ? 'bsh-t' : 'bsh-b' }">
@@ -29,6 +29,16 @@ class ticker extends nc {
   load (el) {
     let smarquee = new Smarquee({
       selector: `#smarquee-${this.data.side}`,
+      styleOptions: {
+        scrollingTitleMargin: 0,
+        animationName: 'marquee',
+        timingFunction: 'linear',
+        iterationCount: 'infinite',
+        fillMode: 'none',
+        playState: 'running',
+        delay: '0',
+        pausePercent: 0
+      },
     })
     smarquee.init()
     this.state.components.ticker.push(smarquee) 
