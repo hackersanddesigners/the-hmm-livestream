@@ -68,7 +68,7 @@ const createLiveStream = async () => {
 
 // reads a state file looking for an existing live stream, if it can't find one, 
 // creates a new one, saving the new live stream to our state file and global stream variable.
-const initialize = async () => {
+const initialize = async() => {
   try {
     const stateFile = await fs.readFile(stateFilePath, 'utf8')
     STREAM = JSON.parse(stateFile)
@@ -131,7 +131,7 @@ db(adapter)
   })
 
 // -- /stream, bootstrap the live-stream
-app.get('/stream', async (req, res) => {
+app.get('/stream', async(req, res) => {
   const stream = await Video.LiveStreams.get(STREAM.id)
   res.json(
     publicStreamDetails(stream)
