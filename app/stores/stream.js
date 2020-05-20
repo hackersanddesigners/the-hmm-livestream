@@ -3,6 +3,7 @@ const socket = io()
 
 function stream (state, emitter) {
   state.components.socket = socket
+
   state.components.video = {
     stream: null,
     controls: false,
@@ -26,6 +27,7 @@ function stream (state, emitter) {
     const stream = await fetch('/stream')
     if (stream.ok) {
       const data = await stream.json()
+      console.log(data)
       state.components.video.stream = data
 
       if (data.status === 'active') {
