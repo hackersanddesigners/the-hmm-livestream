@@ -182,6 +182,10 @@ app.post('/donate/webhook', async(req, res) => {
   res.sendStatus(200)
 })
 
+// redirect all urls to `index.html`
+// app.get('*', (req, res) => {
+//   res.sendFile(path.resolve(__dirname, 'index.html'))
+// })
 
 // -- start
 initialize().then((stream) => {
