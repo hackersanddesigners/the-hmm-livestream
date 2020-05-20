@@ -151,29 +151,35 @@ app.post('/mux-hook', auth, function (req, res) {
   res.sendStatus(200)
 })
 
-app.post('/donate', async (req, res) => {
+app.post('/donate', async(req, res) => {
   let data = req.body
   console.log('data =>', data)
-  ;
-  (async () => {
-    try {
-      const payment = await mollieClient.payments.create({
-        amount: {
-          currency: 'EUR',
-          value: data.amount, // We enforce the correct number of decimals through strings
-        },
-        description: data.description,
-        redirectUrl: 'https://live.hackersanddesigners.nl',
-        // webhookUrl: 'https://live.hackersanddesigners.nl/donate/webhook/',
-      })
-      payment.getCheckoutUrl()
-      console.log(payment)
-      res.send(payment)
-    } catch (error) {
-      console.warn(error)
-      res.send(error)
-    }
-  })();
+  try {
+    const payment = await mollieClient.payments.create({
+      amount: {
+        currency: 'EUR',
+        value: data.amount,
+      },
+      description: data.description,
+      redirectUrl: 'https://live.hackersanddesigners.nl/checkout',
+      webhookUrl: 'https://live.hackersanddesigners.nl/donate/webhook'
+    })
+
+    console.log('donate-payment =>', payment)
+    res.send(payment)
+  } catch (error) {
+    console.warn('donate-err =>', error)
+    res.send(error)
+  }
+})
+
+app.post('/donate/webhook', async(req, res) => {
+  console.log('/DONATE/WEBHOOK =>', req.body.id)
+  const payment = await mollieClient.payments.get(req.body.id)
+  const data = await payment.json()
+  console.log(data)
+  
+  res.sendStatus(200)
 })
 
 
