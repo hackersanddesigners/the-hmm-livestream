@@ -34,12 +34,18 @@ class videoPlayer extends nc {
     const stream = this.data.stream
     const videoSrc = `https://stream.mux.com/${stream.playbackId}.m3u8`
 
-    console.log(videoSrc)
+    console.log('video-load =>', stream, videoSrc)
 
     if (Hls.isSupported()) {
-      var hls = new Hls();
+      const hls = this.state.components.video.hls === null
+            ? new Hls()
+            : this.state.components.video.hls
+
       hls.loadSource(videoSrc)
       hls.attachMedia(video)
+
+      this.state.components.video.hls = hls
+      
     } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
       video.src = videoSrc
     }

@@ -7,7 +7,8 @@ function stream (state, emitter) {
   state.components.video = {
     stream: null,
     controls: false,
-    muted: true
+    muted: true,
+    hls: null
   } 
 
   state.components.ticker = []
@@ -67,6 +68,7 @@ function stream (state, emitter) {
 
   socket.on('stream-update', (stream) => {
     state.components.video.controls =! state.components.video.controls
+    console.log('stream-update =>', stream)
     state.components.video.stream = stream
     emitter.emit('render')
   })
@@ -98,8 +100,8 @@ function stream (state, emitter) {
     if (response.ok) {
       const data = await response.json()
 
-      // redirect to checkout-url
-      window.location.href = data._links.checkout.href
+      // open new window to checkout-url
+      window.open(data._links.checkout.href, '_blank')
     } else {
       return response.error
     }
