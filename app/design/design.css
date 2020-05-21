@@ -95,3 +95,13 @@ strong, b {
   overflow: hidden;
   padding-top: calc((5 / 8) * 100%);
 }
+
+.w-chat {
+  width: 36%;
+}
+
+@media screen and (min-width: 39rem) {
+    .md-w-chat {
+      width: 16.5rem;
+    }
+}
