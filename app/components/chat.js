@@ -132,7 +132,6 @@ class chat extends nc {
 
   load (el) {
     const chatWrap = el.querySelector('.chat-wrap')
-    console.log(chatWrap)
   }
 
   update () {
@@ -142,7 +141,6 @@ class chat extends nc {
   afterupdate(el) {
     const chatList = el.querySelector('.chat-list')
     chatList.scrollIntoView(false)
-    console.log('SUBMIT!!')
   }
 }
 
