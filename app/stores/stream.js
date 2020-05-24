@@ -28,7 +28,6 @@ function stream (state, emitter) {
     const stream = await fetch('/stream')
     if (stream.ok) {
       const data = await stream.json()
-      console.log(data)
       state.components.video.stream = data
 
       if (data.status === 'active') {
@@ -56,7 +55,6 @@ function stream (state, emitter) {
   })
 
   socket.on('chat-msg', (msg) => {
-    console.log('chat-msg', msg)
     state.components.chat.posts.push(msg)
     emitter.emit('render')
   })
@@ -68,14 +66,17 @@ function stream (state, emitter) {
 
   socket.on('stream-update', (stream) => {
     state.components.video.controls =! state.components.video.controls
-    console.log('stream-update =>', stream)
     state.components.video.stream = stream
     emitter.emit('render')
   })
 
   emitter.on('toggle-video', () => {
-    console.log('video-toggled')
     state.components.video.controls =! state.components.video.controls
+    state.components.video.muted =! state.components.video.muted
+    emitter.emit('render')
+  })
+
+  emitter.on('video-mute-toggle', () => {
     state.components.video.muted =! state.components.video.muted
     emitter.emit('render')
   })

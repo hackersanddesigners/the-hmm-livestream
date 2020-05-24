@@ -105,3 +105,15 @@ strong, b {
       width: 16.5rem;
     }
 }
+
+.t50 {
+  top: 50%;
+}
+
+.l50 {
+  left: 50%; 
+}
+
+.ttcc {
+  transform: translate(-50%, -50%)
+}

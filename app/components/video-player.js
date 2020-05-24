@@ -17,8 +17,22 @@ class videoPlayer extends nc {
     this.data = data
     
     return html`
-      <video onplay=${onPlay(emit)} onpause=${onPause(emit)} ${data.controls ? 'controls' : ''} class="psa t0 l0 b0 r0 w100 bgc-bk"> 
+      <div class="psa t0 l0 b0 r0 w100 bgc-bk">
+        <button onclick=${muteToggle} class="${state.components.video.muted ? 'psa t0 l0 w100 h100 curp x xjc xac' : 'dn' }">
+          <div class="psa t0 l0 w100 h100 bgc-bk op50"></div>
+          <p class="z1 bgc-wh py0-25 px0-25">unmute</p>
+        </button>
+        <video onplay=${onPlay(emit)} onpause=${onPause(emit)} ${data.controls ? 'controls' : ''} class="w100"> 
+      </div>
     `
+
+    function muteToggle (e) {
+      e.preventDefault()
+
+      state.components.video.muted = false
+      e.currentTarget.nextSibling.muted = false
+      e.currentTarget.classList.add('dn')
+    }
 
     function onPlay(emit) {
       return () => {emit('ticker-toggle', 'play')}
@@ -30,11 +44,9 @@ class videoPlayer extends nc {
   }
 
   load () {
-    const video = this.element
+    const video = this.element.querySelector('video')
     const stream = this.data.stream
     const videoSrc = `https://stream.mux.com/${stream.playbackId}.m3u8`
-
-    console.log('video-load =>', stream, videoSrc)
 
     if (Hls.isSupported()) {
       const hls = this.state.components.video.hls === null
@@ -44,10 +56,15 @@ class videoPlayer extends nc {
       hls.loadSource(videoSrc)
       hls.attachMedia(video)
 
+      video.muted = true
+      video.play()
+
       this.state.components.video.hls = hls
       
     } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
       video.src = videoSrc
+      video.muted = true
+      video.play()
     }
   }
 
