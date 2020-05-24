@@ -50,9 +50,7 @@ function view (state, emit) {
         ${tickerT.render(state, emit, {string: 'The Hmm @ Hackers & Designers |', n: 15, side: 'top'})}
         <div class="psr w--full bgc-bk">
           <div class="z2 psa t0 l0 bgc-wh p0-15">status: ${video.stream !== null ? video.stream.status : '...'}</div>
-          <div style="max-width: 39rem; margin: 0 auto;">
-            ${videoBlock(video)}
-          </div>
+          ${videoBlock(video)}
           ${chatBox(state, emit)}
         </div>
         ${tickerB.render(state, emit, {string: 'The Hmm @ Hackers & Designers |', n: 15, side: 'bottom'})} 

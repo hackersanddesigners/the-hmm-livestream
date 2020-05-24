@@ -22,7 +22,7 @@ class videoPlayer extends nc {
           <div class="psa t0 l0 w100 h100 bgc-bk op50"></div>
           <p class="z1 bgc-wh py0-25 px0-25">unmute</p>
         </button>
-        <video onplay=${onPlay(emit)} onpause=${onPause(emit)} ${data.controls ? 'controls' : ''} class="w100"> 
+        <video onplay=${onPlay(emit)} onpause=${onPause(emit)} ${data.controls ? 'controls' : ''} class="w100 h100"> 
       </div>
     `
 
