@@ -21,17 +21,14 @@ function view (state, emit) {
         </figure>
       </header>
       ${content(state, emit)} 
-      <footer class="p1 x xdr xw xjb">
-         ${donate.render(state, emit)}
-         ${viewers(state, emit)}
-       </div>
+      ${viewers(state, emit)}
     </body>
   ` 
 
   function chatBox (state, emit) {
     return html`
       <div class="w-chat md-w-chat psa b0 r0 btlr bgc-bl fc-wh b-wh ${state.components.chat.toggle ? ' h100 oys' : 'tac'}">
-        <button onclick=${toggleBox(emit)} type="button" class="ft-ms curp${state.components.chat.toggle ? ' psa t0 r0 pt0-25 px0-5' : ' py1 w100'}">${state.components.chat.toggle ? ' x' : 'Chat'}</button>
+        <button onclick=${toggleBox(emit)} type="button" class="ft-ms curp${state.components.chat.toggle ? ' psa t0 r0 pt0-25 pl0-5 pr1' : ' py1 w100'}">${state.components.chat.toggle ? ' x' : 'Chat'}</button>
         ${chat.render(state, emit, {})}
       </div>
     ` 
@@ -40,7 +37,7 @@ function view (state, emit) {
   function viewers (state, emit) {
     const count = state.components.chat.userCount
     return html`
-      <p>${count} viewers</p>
+      <p class="p1 tar">${count} viewers</p>
     `
   }
 
@@ -50,14 +47,15 @@ function view (state, emit) {
     const tickerB = state.cache(Ticker, '01-b')
     return html`
       <main class="x xdc">
-        ${tickerT.render(state, emit, {string: 'The Hmm @ Hackers & Designers', n: 15, side: 'top'})}
+        ${tickerT.render(state, emit, {string: 'The Hmm @ Hackers & Designers |', n: 15, side: 'top'})}
         <div class="psr w--full bgc-bk">
+          <div class="z2 psa t0 l0 bgc-wh p0-15">status: ${video.stream !== null ? video.stream.status : '...'}</div>
           <div style="max-width: 39rem; margin: 0 auto;">
             ${videoBlock(video)}
           </div>
           ${chatBox(state, emit)}
         </div>
-        ${tickerB.render(state, emit, {string: 'The Hmm @ Hackers & Designers', n: 15, side: 'bottom'})} 
+        ${tickerB.render(state, emit, {string: 'The Hmm @ Hackers & Designers |', n: 15, side: 'bottom'})} 
       </main>
     `
   }
@@ -70,15 +68,12 @@ function view (state, emit) {
     if (video.stream !== null) {
       return html`
         <div class="psr video-ar bgc-bk">
-          <div class="z2 psa t0 l0 bgc-wh p0-15">status: ${video.stream.status}</div>
           ${videoWrapper(video)}
         </div>
       `
     } else {
       return html`
-        <div class="psr video-ar bgc-bk">
-          <div class="psa t0 l0 bgc-wh p0-15">status: ...</div> 
-        </div>
+        <div class="psr video-ar bgc-bk"></div>
       `
     }
 
