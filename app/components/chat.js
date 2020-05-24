@@ -18,13 +18,13 @@ class chat extends nc {
     return html`
       <div class="${state.components.chat.toggle ? 'x xdc h100' : 'dn'}">
         ${storage()}
-        <div style="max-height: 20.5rem" class="chat-wrap p0-5 oys">
+        <div class="chat-wrap ${state.components.chat.username !== undefined ? 'h-chat-sg' : 'h-chat-db'} p0-5 oys">
           <div class="p0-5 chat-list">${msgList(state.components.chat.posts)}</div>
         </div>
 
         <form onsubmit=${onsubmit} method="post" class="p0-5 bt-wh bgc-bl">
           ${setUsername(state)}
-          <input required class="message w100" type="text" placeholder="Type here to send a message">
+          <input class="message w100" type="text" placeholder="Type here to send a message">
           <input class="psf t0 l-999" type="submit" value="Send">
         </form>
       </div>

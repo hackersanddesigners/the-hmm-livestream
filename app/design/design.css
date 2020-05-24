@@ -109,6 +109,14 @@ strong, b {
   width: 36%;
 }
 
+.h-chat-sg {
+  height: calc(100% - 41px)
+}
+
+.h-chat-db {
+  height: calc(100% - 63px)
+}
+
 @media screen and (min-width: 39rem) {
   .md-w-chat {
     width: 16.5rem;
