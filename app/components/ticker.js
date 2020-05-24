@@ -17,7 +17,7 @@ class ticker extends nc {
     this.data = data
 
     const filler = Array.from(Array(data.n).fill(data.string))
-    const fillText = filler.map(text => html`<span class="dbi pr0-25">${text}</span>`)
+    const fillText = filler.map(text => html`<span class="dbi pr0-15">${text}</span>`)
 
     return html`
       <div id="smarquee-${data.side}" class="z1 py0-25 bgc-yl ${data.side === 'top' ? 'bsh-t' : 'bsh-b' }">
