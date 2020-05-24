@@ -19,10 +19,9 @@ class videoPlayer extends nc {
     return html`
       <div class="psa t0 l0 b0 r0 w100 bgc-bk">
         <button onclick=${muteToggle} class="${state.components.video.muted ? 'psa t0 l0 w100 h100 curp x xjc xac' : 'dn' }">
-          <div class="psa t0 l0 w100 h100 bgc-bk op50"></div>
-          <p class="z1 bgc-wh py0-25 px0-25">unmute</p>
+          <p class="z1 bgc-wh py1 px2 br1 bsh b-bk">unmute</p>
         </button>
-        <video onplay=${onPlay(emit)} onpause=${onPause(emit)} ${data.controls ? 'controls' : ''} class="w100 h100"> 
+        <video onplay=${onPlay(emit)} onpause=${onPause(emit)} ${data.controls ? 'controls' : ''} class="w100 h100 bgc-bk"> 
       </div>
     `
 

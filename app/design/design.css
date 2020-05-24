@@ -85,6 +85,14 @@ strong, b {
   box-shadow: 0 1em 1em rgba(0,0,0,0.3)
 }
 
+.br1 {
+  border-radius: 1rem;
+}
+
+.bsh {
+  box-shadow: 0 0 1em rgba(0,0,0,0.5)
+}
+
 .btlr {
   border-top-left-radius: 1.5rem;
 }
@@ -102,9 +110,9 @@ strong, b {
 }
 
 @media screen and (min-width: 39rem) {
-    .md-w-chat {
-      width: 16.5rem;
-    }
+  .md-w-chat {
+    width: 16.5rem;
+  }
 }
 
 .t50 {
