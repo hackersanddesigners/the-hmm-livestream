@@ -107,6 +107,10 @@ strong, b {
   width: 36%;
 }
 
+.h-chat {
+  height: 3.55rem;
+}
+
 .h-chat-sg {
   height: calc(100% - 41px)
 }
