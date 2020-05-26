@@ -27,7 +27,7 @@ function view (state, emit) {
 
   function chatBox (state, emit) {
     return html`
-      <div class="w-chat md-w-chat psa b0 r0 btlr bgc-bl fc-wh b-wh ${state.components.chat.toggle ? ' h100 oys' : 'tac'}">
+      <div class="psr w-chat md-w-chat btlr bgc-bl fc-wh b-wh ${state.components.chat.toggle ? ' oys video-ar' : 'tac'}">
         <button onclick=${toggleBox(emit)} type="button" class="ft-ms curp${state.components.chat.toggle ? ' psa t0 r0 pt0-25 pl0-5 pr1' : ' py1 w100'}">${state.components.chat.toggle ? ' x' : 'Chat'}</button>
         ${chat.render(state, emit, {})}
       </div>
@@ -48,7 +48,7 @@ function view (state, emit) {
     return html`
       <main class="x xdc">
         ${tickerT.render(state, emit, {string: 'The Hmm @ Hackers & Designers |', n: 15, side: 'top'})}
-        <div class="psr w--full bgc-bk">
+        <div class="psr x xdr xafe w--full bgc-bk">
           <div class="z2 psa t0 l0 fc-yl p0-5">${video.stream !== null ? video.stream.status : '...'}</div>
           ${videoBlock(video)}
           ${chatBox(state, emit)}
@@ -65,13 +65,13 @@ function view (state, emit) {
   function videoBlock (video) {
     if (video.stream !== null) {
       return html`
-        <div class="psr video-ar bgc-bk">
+        <div class="psr w100 video-ar oh bgc-bk">
           ${videoWrapper(video)}
         </div>
       `
     } else {
       return html`
-        <div class="psr video-ar bgc-bk"></div>
+        <div class="psr w100 video-ar oh bgc-bk"></div>
       `
     }
 

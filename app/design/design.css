@@ -98,11 +98,9 @@ strong, b {
 }
 
 .video-ar {
-  width: 100%;
   height: calc((9 / 16) * 100vw);
   max-height: calc(100vh - 250px);
   min-height: 480px;
-  overflow: hidden;
 }
 
 .w-chat {
