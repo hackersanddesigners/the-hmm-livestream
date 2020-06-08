@@ -35,7 +35,7 @@ function stream (state, emitter) {
         state.components.video.controls = true
       }
       
-      // emitter.emit('render')
+      emitter.emit('render')
     } else {
       return stream.status
     }
@@ -44,12 +44,10 @@ function stream (state, emitter) {
     if (posts.ok) {
       const data = await posts.json()
       state.components.chat.posts = data
-      // emitter.emit('render')
+      emitter.emit('render')
     } else {
       return posts.status
     }
-
-    emitter.emit('render')
   })
 
   emitter.on('chat-toggle', () => {
