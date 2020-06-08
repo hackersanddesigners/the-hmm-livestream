@@ -1,5 +1,13 @@
 const html = require('choo/html')
 const nc = require('nanocomponent')
+const raw = require('choo/html/raw')
+const md = require('markdown-it')({
+  breaks: true,
+  typographer: true,
+  linkify: true
+})
+const chatMsg = require('./chat-msg')
+const formatDate = require('../utils/formatDate')
 
 class chat extends nc {
   constructor (state, emit) {
@@ -35,32 +43,12 @@ class chat extends nc {
           <input required class="username" type="text" placeholder="Pick a username">
         `
       }
-    }
-
-    function formatDate(ts) {
-      const t = new Date(ts).toLocaleString('nl-NL')
-      const tsp = t.split(' ')
-      const dt_sp = tsp[0].split('-')
-      const tt_sp = tsp[1].split(':')
-
-      const date = `${dt_sp[2]}.${dt_sp[1]}.${dt_sp[0]} ${tt_sp[0]}:${tt_sp[1]}`
-      const iso = `${dt_sp[2]}.${dt_sp[1]}.${dt_sp[0]}T${tt_sp[0]}:${tt_sp[1]}`
-
-      return {
-        iso: iso,
-        date: date
-      }
-    }
+    } 
 
     function msgList (data) {
       if (data.length > 0) {
         return data.map(msg => {
-          return html`
-            <div class="x xdc xw pb1">
-              <time datetime="${formatDate(msg.timestamp).iso}" class="ft-ms fs0-8">${formatDate(msg.timestamp).date}</time>
-              <p class="pl1">${msg.username}: ${msg.value}</p>
-            </div>
-          `
+          return chatMsg(msg)
         })
       } else {
         return html`
@@ -91,32 +79,21 @@ class chat extends nc {
         value: input_message.value
       }
 
-      // send msg to db
+      // send msg to db + append it w/o app re-render
       state.components.socket.emit('chat-msg', msg)
 
-      // append it instantly w/o re-rendering app
-      const chatList = e.originalTarget.previousElementSibling.childNodes[0]
+      // hide input-username
       if (input_username !== null) {
         input_username.classList.add('dn')
       }
+
+      // clear input-message
       input_message.value = ''
 
-      e.originalTarget.previousElementSibling.classList.remove('h-chat-db')
-      e.originalTarget.previousElementSibling.classList.add('h-chat-sg')
-
-      appendMsg(chatList, msg)
-    }
-
-    function appendMsg (el, msg) {
-      const newMsg = html`
-        <div class="x xdc xw pb1">
-          <time datetime="${formatDate(msg.timestamp).iso}" class="ft-ms fs0-8">${formatDate(msg.timestamp).date}</time>
-          <p class="pl1">${msg.username}: ${msg.value}</p>
-        </div>
-      `
-
-      el.append(newMsg)
-      el.scrollIntoView(false)
+      // set correct chat-list height
+      const chatList = e.originalTarget.previousElementSibling.childNodes[0]
+      chatList.classList.remove('h-chat-db')
+      chatList.classList.add('h-chat-sg')
     }
 
     function storageAvailable (type) {

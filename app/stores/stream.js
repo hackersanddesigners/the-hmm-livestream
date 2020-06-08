@@ -1,6 +1,6 @@
 const io = require('socket.io-client')
 const socket = io()
-const html = require('choo/html')
+const appendMsg = require('../utils/appendMsg')
 
 function stream (state, emitter) {
   state.components.socket = socket
@@ -60,16 +60,7 @@ function stream (state, emitter) {
   socket.on('chat-msg', (msg) => {
     state.components.chat.posts.push(msg)
     const chatList = document.querySelector('.chat-list')
-
-    const newMsg = html`
-      <div class="x xdc xw pb1">
-          <time datetime="${msg.timestamp}" class="ft-ms fs0-8">${msg.timestamp}</time>
-          <p class="pl1">${msg.username}: ${msg.value}</p>
-        </div>
-    `
-
-    chatList.append(newMsg)
-    chatList.scrollIntoView(false)
+    appendMsg(chatList, msg)
   })
 
   socket.on('user-count', (count) => {
