@@ -91,9 +91,10 @@ class chat extends nc {
       input_message.value = ''
 
       // set correct chat-list height
-      const chatList = e.originalTarget.previousElementSibling.childNodes[0]
+      const chatList = e.originalTarget.previousElementSibling
       chatList.classList.remove('h-chat-db')
       chatList.classList.add('h-chat-sg')
+      console.log('chatList =>', chatList)
     }
 
     function storageAvailable (type) {
