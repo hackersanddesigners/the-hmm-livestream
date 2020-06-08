@@ -1,5 +1,6 @@
 const io = require('socket.io-client')
 const socket = io()
+const html = require('choo/html')
 
 function stream (state, emitter) {
   state.components.socket = socket
@@ -34,7 +35,7 @@ function stream (state, emitter) {
         state.components.video.controls = true
       }
       
-      emitter.emit('render')
+      // emitter.emit('render')
     } else {
       return stream.status
     }
@@ -43,10 +44,12 @@ function stream (state, emitter) {
     if (posts.ok) {
       const data = await posts.json()
       state.components.chat.posts = data
-      emitter.emit('render')
+      // emitter.emit('render')
     } else {
       return posts.status
     }
+
+    emitter.emit('render')
   })
 
   emitter.on('chat-toggle', () => {
@@ -56,12 +59,22 @@ function stream (state, emitter) {
 
   socket.on('chat-msg', (msg) => {
     state.components.chat.posts.push(msg)
-    emitter.emit('render')
+    const chatList = document.querySelector('.chat-list')
+
+    const newMsg = html`
+      <div class="x xdc xw pb1">
+          <time datetime="${msg.timestamp}" class="ft-ms fs0-8">${msg.timestamp}</time>
+          <p class="pl1">${msg.username}: ${msg.value}</p>
+        </div>
+    `
+
+    chatList.append(newMsg)
+    chatList.scrollIntoView(false)
   })
 
   socket.on('user-count', (count) => {
     state.components.chat.userCount = count
-    emitter.emit('render')
+    document.querySelector('.user-count > span').innerText = count
   })
 
   socket.on('stream-update', (stream) => {

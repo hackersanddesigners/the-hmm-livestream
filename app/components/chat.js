@@ -16,22 +16,21 @@ class chat extends nc {
     this.data = data
 
     return html`
-      <div class="${state.components.chat.toggle ? 'x xdc h100' : 'dn'}">
+      <div class="${data.toggle ? 'x xdc h100' : 'dn'}">
         ${storage()}
-        <div class="chat-wrap ${state.components.chat.username !== undefined ? 'h-chat-sg' : 'h-chat-db'} p0-5 oys">
-          <div class="p0-5 chat-list">${msgList(state.components.chat.posts)}</div>
+        <div class="chat-wrap ${sessionStorage.getItem('username') !== null ? 'h-chat-sg' : 'h-chat-db'} p0-5 oys">
+          <div class="p0-5 chat-list">${msgList(data.posts)}</div>
         </div>
-
         <form onsubmit=${onsubmit} method="post" class="p0-5 bt-wh bgc-bl">
-          ${setUsername(state)}
+          ${setUsername(sessionStorage.getItem('username'))}
           <input class="message w100" type="text" placeholder="Type here to send a message">
           <input class="psf t0 l-999" type="submit" value="Send">
         </form>
       </div>
     `
 
-    function setUsername (state) {
-      if (state.components.chat.username === undefined) {
+    function setUsername (username) {
+      if (username === null) {
         return html`
           <input required class="username" type="text" placeholder="Pick a username">
         `
@@ -68,7 +67,6 @@ class chat extends nc {
           <div><p>no message yet</p></div>
         `
       }
-
     }
 
     function onsubmit (e) {
@@ -78,24 +76,48 @@ class chat extends nc {
       const input_username = form.querySelector('.username')
       const input_message = form.querySelector('.message')
 
-      let username = localStorage.getItem('username')
-      
+      let username = ''
+      console.log('input-username', input_username)
       if (input_username !== null) {
-        localStorage.setItem('username', input_username.value)
-        state.components.chat.username = input_username.value
-      } else {
-        state.components.chat.username = username
+        username = input_username.value
+        sessionStorage.setItem('username', input_username.value)
+      } else if (sessionStorage.getItem('username') !== null) {
+        username = sessionStorage.getItem('username')
       }
 
       const msg = {
         timestamp: new Date(),
-        username: state.components.chat.username,
+        username: username,
         value: input_message.value
       }
 
+      // send msg to db
       state.components.socket.emit('chat-msg', msg)
+
+      // append it instantly w/o re-rendering app
+      const chatList = e.originalTarget.previousElementSibling.childNodes[0]
+      if (input_username !== null) {
+        input_username.classList.add('dn')
+      }
+      input_message.value = ''
+
+      e.originalTarget.previousElementSibling.classList.remove('h-chat-db')
+      e.originalTarget.previousElementSibling.classList.add('h-chat-sg')
+
+      appendMsg(chatList, msg)
     }
 
+    function appendMsg (el, msg) {
+      const newMsg = html`
+        <div class="x xdc xw pb1">
+          <time datetime="${formatDate(msg.timestamp).iso}" class="ft-ms fs0-8">${formatDate(msg.timestamp).date}</time>
+          <p class="pl1">${msg.username}: ${msg.value}</p>
+        </div>
+      `
+
+      el.append(newMsg)
+      el.scrollIntoView(false)
+    }
 
     function storageAvailable (type) {
       try {
@@ -122,9 +144,9 @@ class chat extends nc {
 
     function storage () {
       if (storageAvailable('localStorage')) {
-        console.log('yes! we can use localstorage')
+        // console.log('yes! we can use localstorage')
       } else {
-        console.log('no localStorage')
+        // console.log('no localStorage')
       }
     }
 

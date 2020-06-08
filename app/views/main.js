@@ -7,6 +7,8 @@ const chat = new Chat()
 const Donate = require('../components/donate')
 const donate = new Donate()
 const Ticker = require('../components/ticker')
+const Viewers = require('../components/viewers')
+const viewers = new Viewers()
 
 function view (state, emit) {
   console.log(state)
@@ -21,24 +23,18 @@ function view (state, emit) {
         </figure>
       </header>
       ${content(state, emit)} 
-      ${viewers(state, emit)}
+      ${viewers.render(state, emit, state.components.chat.userCount)}
     </body>
   ` 
 
   function chatBox (state, emit) {
+    const data = state.components.chat
     return html`
       <div class="psr w-chat md-w-chat btlr bgc-bl fc-wh b-wh ${state.components.chat.toggle ? 'oys video-ar' : 'h-chat tac'}">
         <button onclick=${toggleBox(emit)} type="button" class="ft-ms curp${state.components.chat.toggle ? ' psa t0 r0 pt0-25 pl0-5 pr1' : ' py1 w100'}">${state.components.chat.toggle ? ' x' : 'Chat'}</button>
-        ${chat.render(state, emit, {})}
+        ${chat.render(state, emit, data)}
       </div>
     ` 
-  }
-
-  function viewers (state, emit) {
-    const count = state.components.chat.userCount
-    return html`
-      <p class="p1 tar">${count} viewers</p>
-    `
   }
 
   function content (state, emit) {
