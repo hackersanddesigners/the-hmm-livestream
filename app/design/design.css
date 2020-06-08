@@ -136,3 +136,9 @@ strong, b {
 .ttcc {
   transform: translate(-50%, -50%)
 }
+
+.ow {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
+}
