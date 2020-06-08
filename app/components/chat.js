@@ -79,7 +79,7 @@ class chat extends nc {
         value: input_message.value
       }
 
-      // send msg to db + append it w/o app re-render
+      // send msg to db + append it to chat w/o app re-render
       state.components.socket.emit('chat-msg', msg)
 
       // hide input-username
