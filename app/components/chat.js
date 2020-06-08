@@ -31,7 +31,7 @@ class chat extends nc {
         </div>
         <form onsubmit=${onsubmit} method="post" class="p0-5 bt-wh bgc-bl">
           ${setUsername(sessionStorage.getItem('username'))}
-          <input class="message w100" type="text" placeholder="Type here to send a message">
+          <input required class="message w100" type="text" placeholder="Type here to send a message">
           <input class="psf t0 l-999" type="submit" value="Send">
         </form>
       </div>
