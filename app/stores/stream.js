@@ -105,6 +105,7 @@ function stream (state, emitter) {
 
       // open new window to checkout-url
       window.open(data._links.checkout.href, '_blank')
+      // window.location.replace(data._links.checkout.href)
     } else {
       return response.error
     }

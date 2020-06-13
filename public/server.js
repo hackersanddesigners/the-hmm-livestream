@@ -2,6 +2,7 @@ require('dotenv').config()
 const fs = require('fs').promises
 const path = require('path')
 const express = require('express')
+const cors = require('cors')
 const basicAuth = require('basic-auth')
 const app = express()
 const Mux = require('@mux/mux-node')
@@ -12,12 +13,20 @@ const FileAsync = require('lowdb/adapters/FileAsync')
 const http = require('http').Server(app)
 const socket = require('socket.io')(http)
 const { createMollieClient } = require('@mollie/api-client');
-const mollieClient = createMollieClient({ apiKey: process.env.MOLLIE });
+const mollieClient = createMollieClient({ apiKey: process.env.MOLLIE_API_KEY });
 
-// serve index.html with choo app
-app.get('/', (req, res) => {
-  res.sendFile(path.resolve(__dirname, 'index.html'))
-})
+// const corsOptions = {
+//   origin: true,
+//   methods: ['POST'],
+//   allowedHeaders: 'Access-Control-Allow-Origin'
+// }
+// app.use(cors(corsOptions))
+
+// app.use(function(req, res, next) {
+//   res.header("Access-Control-Allow-Origin", "https://live.hackersanddesigners.nl/"); // update to match the domain you will make the request from
+//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//   next();
+// });
 
 app.use('/assets', express.static(path.resolve(__dirname, 'assets')))
 
@@ -130,6 +139,11 @@ db(adapter)
     
   })
 
+// serve index.html with choo app
+app.get('/', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'index.html'))
+})
+
 // -- /stream, bootstrap the live-stream
 app.get('/stream', async(req, res) => {
   const stream = await Video.LiveStreams.get(STREAM.id)
@@ -160,13 +174,18 @@ app.post('/donate', async(req, res) => {
         currency: 'EUR',
         value: data.amount,
       },
+      metadata: {
+        order_id: Buffer.from(new Date(), 'utf8').toString('hex'),
+      },
       description: data.description,
-      redirectUrl: 'https://live.hackersanddesigners.nl/checkout',
-      webhookUrl: 'https://live.hackersanddesigners.nl/donate/webhook'
+      redirectUrl: process.env.MOLLIE_REDIRECT_URL,
+      webhookUrl: process.env.MOLLIE_WEBHOOK_URL
     })
 
     console.log('donate-payment =>', payment)
     res.send(payment)
+    // console.log('getPaymentUrl =>', payment._links.checkout)
+    // res.redirect(payment._links.checkout.url)
   } catch (error) {
     console.warn('donate-err =>', error)
     res.send(error)
@@ -174,18 +193,13 @@ app.post('/donate', async(req, res) => {
 })
 
 app.post('/donate/webhook', async(req, res) => {
-  console.log('/DONATE/WEBHOOK =>', req.body.id)
-  const payment = await mollieClient.payments.get(req.body.id)
-  const data = await payment.json()
-  console.log(data)
+  console.log('/donate/webhook =>', req.body)
+  // const payment = await mollieClient.payments.get(req.body.orderId)
+  // const data = await payment.json()
+  // console.log(data)
   
   res.sendStatus(200)
 })
-
-// redirect all urls to `index.html`
-// app.get('*', (req, res) => {
-//   res.sendFile(path.resolve(__dirname, 'index.html'))
-// })
 
 // -- start
 initialize().then((stream) => {
