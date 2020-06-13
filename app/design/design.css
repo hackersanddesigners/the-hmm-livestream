@@ -103,12 +103,24 @@ strong, b {
   min-height: 480px;
 }
 
-.w-chat {
-  width: 36%;
+@media screen and (min-width: 42rem) {
+  .md-w-chat {
+    width: 36%;
+  }
+
+  .md-video-ar {
+    height: calc((9 / 16) * 100vw);
+    max-height: calc(100vh - 250px);
+    min-height: 480px;
+  }
 }
 
 .h-chat {
   height: 3.55rem;
+}
+
+.h-chat-open {
+  height: 12rem;
 }
 
 .h-chat-sg {
@@ -119,7 +131,7 @@ strong, b {
   height: calc(100% - 63px)
 }
 
-@media screen and (min-width: 39rem) {
+@media screen and (min-width: 900px) {
   .md-w-chat {
     width: 16.5rem;
   }

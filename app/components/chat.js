@@ -27,12 +27,14 @@ class chat extends nc {
       <div class="${data.toggle ? 'x xdc h100' : 'dn'}">
         ${storage()}
         <div class="chat-wrap ${sessionStorage.getItem('username') !== null ? 'h-chat-sg' : 'h-chat-db'} p0-5 oys">
-          <div class="p0-5 chat-list">${msgList(data.posts)}</div>
+          <div class="p0-5 chat-list oxh">${msgList(data.posts)}</div>
         </div>
-        <form onsubmit=${onsubmit} method="post" class="p0-5 bt-wh bgc-bl">
-          ${setUsername(sessionStorage.getItem('username'))}
-          <input required class="message w100" type="text" placeholder="Type here to send a message">
-          <input class="psf t0 l-999" type="submit" value="Send">
+        <form onsubmit=${onsubmit} method="post" class="x xdr xafe p0-5 bt-wh bgc-bl">
+          <div class="x xdc w100">
+            ${setUsername(sessionStorage.getItem('username'))}
+            <input required class="message w100" type="text" placeholder="Type here to send a message">
+          </div>
+          <input class="curp pl0-5 md-psf md-t0 md-l-999" type="submit" value="Send">
         </form>
       </div>
     `
