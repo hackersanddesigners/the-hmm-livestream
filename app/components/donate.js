@@ -20,7 +20,7 @@ class donate extends nc {
     }
     
     return html`
-      <div>
+      <div class="p1">
         <button class="curp" onclick=${toggle(emit)}>Donate</button>
         <form onsubmit=${onsubmit} method="post" class="${state.components.donate.toggle ? 'x xdc pt1' : 'dn'}">
           <div class="x xdr pb1">
