@@ -40,3 +40,56 @@ the repo contains a `public` folder and an `app` folder. you need to first compi
   - when the app talks with the MUX APIs, *the terminal will print the key we need to use with [OBS](ht*tps://obsproject.com/) to setup the connection between the computer that is going to stream and the stream created in our MUX account; let’s copy this key and put it inside the streaming configuration for OBS. this key is re-printed any time we run the app (by doing `npm run start`), so we can always double check in case we forget (this key is read from the `stream` file inside the `public/.data`)
   
 I suggest to also read through [the article](https://mux.com/articles/how-to-build-your-own-live-streaming-app-with-mux-video/) mentioned at the beginning, especially the final part on setting up the app with OBS.
+
+## server
+
+### process management
+
+as said, to run the app you need to do `npm run start` from within the `public` folder. to keep this process ongoing, we can either use [pm2](https://github.com/Unitech/pm2) or a [systemd](https://en.m.wikipedia.org/wiki/Systemd) configuration file.
+
+since systemd is only available on pure linux-distros, i’ll briefly explain how to setup `pm2`.
+
+assuming you have node.js installed, you can install pm2 with
+
+```
+npm install pm2 -g
+```
+
+then, move to the app location, and inside the `public` folder type
+
+```
+pm2 start npm run start --name="<some-name>"
+```
+
+where `<some-name>` is replaced by how you want to call the app.
+
+then type `pm2 list` to see all the apps that `pm2` is controlling, you should see yours.
+
+### nginx config
+
+following a sample configuration to use with `nginx`, if that’s the software you use to manage your servers. for apache2 or other options, the code should be similar.
+
+```
+server_name <domain-name>;
+ 
+    access_log /var/log/nginx/live.access.log;
+    error_log  /var/log/nginx/live.error.log;
+ 
+    root /var/www/<app-folder>;
+    index index.html;
+ 
+    location ~ / {
+        proxy_pass http://127.0.0.1:4000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+```
+
+this sample does not include setting up `https` with let’s encrypt.
+
+also, we’re running the app on port `4000`. we can change this by opening the `server.js` inside the `public` folder, go to line `206`, and change the `4000` value to something else. then change it in the nginx configuration too.
+
+
