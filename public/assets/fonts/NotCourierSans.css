@@ -1,0 +1,7 @@
+
+@font-face {
+    font-family:"NotCourier";
+    src:url("NotCourierSans.woff2") format("woff2"),url("NotCourierSans.woff") format("woff"),url("NotCourierSans.otf") format("opentype");
+    font-style:normal;font-weight:400;
+}
+        
