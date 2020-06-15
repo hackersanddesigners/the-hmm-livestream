@@ -33,6 +33,7 @@ the repo contains a `public` folder and an `app` folder. you need to first compi
   - `MOLLIE_API_KEY`: get this value when creating a new api key from the Mollie account
   - `MOLLIE_REDIRECT_URL`: set a full url for the page Mollie should redirect to after the payment checkout is done, eg `https://live.hackersanddesigners.nl`
   - `MOLLIE_WEBHOOK_URL`: set a full url to use with Mollie’s Webhook system, eg `https://live.hackersanddesigners.nl/donate/webhook`
+6. you can set whether the MUX stream is in `test-mode` or not, by changing the boolean on line 71 of `public/server.js`
 6. for completeness, there is a `.data` folder inside `public` with two files: `db.json` and `stream`; both are created automatically, the first when the first chat message is sent, the second when we’ll run the app and the backend will talk with the MUX APIs to setup a new stream (if the stream file is found, it will be used instead)
 7. finally, from inside the `public` folder:
   - let’s first do `npm install` to get all the necessary packages
