@@ -35,6 +35,7 @@ the repo contains a `public` folder and an `app` folder. you need to first compi
   - `MOLLIE_WEBHOOK_URL`: set a full url to use with Mollie’s Webhook system, eg `https://live.hackersanddesigners.nl/donate/webhook`
 6. you can set whether the MUX stream is in `test-mode` or not, by changing the boolean on line 71 of `public/server.js`
 7. for completeness, there is a `.data` folder inside `public` with two files: `db.json` and `stream`; both are created automatically, the first when the first chat message is sent, the second when we’ll run the app and the backend will talk with the MUX APIs to setup a new stream (if the stream file is found, it will be used instead)
+  - you can reset the chat history by deleting the `db.json` file
 8. finally, from inside the `public` folder:
   - let’s first do `npm install` to get all the necessary packages
   - then let’s run the app by doing `npm run start` (this runs the command `node server.js`, you can find it inside the `package.json` file in the `public` folder, under the `scripts` key). 
