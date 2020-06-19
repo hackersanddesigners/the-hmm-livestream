@@ -96,7 +96,7 @@ also, we’re running the app on port `4000`. we can change this by opening the 
 
 ## options
 
-some options can be changed by updating `/setting.json`:
+some options can be changed by updating `app/setting.json`:
 
 ```
 {
