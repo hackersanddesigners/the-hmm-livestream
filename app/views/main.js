@@ -8,6 +8,7 @@ const Donate = require('../components/donate')
 const donate = new Donate()
 const Ticker = require('../components/ticker')
 const Viewers = require('../components/viewers')
+const settings = require('../settings.json')
 const viewers = new Viewers()
 
 function view (state, emit) {
@@ -36,6 +37,12 @@ function view (state, emit) {
         ${chat.render(state, emit, data)}
       </div>
     ` 
+  }
+
+  function donateButton (flag) {
+    if (flag) {
+      return donate.render(state, emit)
+    }
   }
 
   function content (state, emit) {

@@ -16,7 +16,7 @@ class viewers extends nc {
     this.count = count
 
     return html`
-      <p class="user-count p1 tar"><span>${count}</span> viewers</p>
+      <p class="user-count p1 mla"><span>${count}</span> viewers</p>
     `
   }
 

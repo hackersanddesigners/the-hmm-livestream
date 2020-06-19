@@ -154,3 +154,7 @@ strong, b {
   word-wrap: break-word;
   hyphens: auto;
 }
+
+.mla {
+  margin-left: auto;
+}
