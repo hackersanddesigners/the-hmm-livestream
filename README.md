@@ -94,3 +94,25 @@ this sample does not include setting up `https` with let’s encrypt.
 
 also, we’re running the app on port `4000`. we can change this by opening the `server.js` inside the `public` folder, go to line `206`, and change the `4000` value to something else. then change it in the nginx configuration too.
 
+## options
+
+some options can be changed by updating `/setting.json`:
+
+```
+{
+  "ticker": {
+    "text": "BodyBuilding: A Platform in Transition |",
+    "backgroundColour": "rgba(255, 55, 5, 1)",
+    "foregroundColour": "#fff",
+    "typeface": "Arial Rounded"
+  },
+  "donateButton": false
+}
+```
+
+`ticker`:
+ - text
+ - background and foreground color
+ - typeface
+ 
+if enabling or not the `donate button`.
