@@ -53,7 +53,7 @@ function view (state, emit) {
       <main class="x xdc">
         ${tickerT.render(state, emit, {string: settings.ticker.text, n: 15, side: 'top'})}
         <div class="psr x xdc md-xdr xafe w--full bgc-bk">
-          <div class="z2 psa t0 l0 fc-yl p0-5">${video.stream !== null ? video.stream.status : '...'}</div>
+          <div class="z2 psa t0 l0 p0-5" style="color: ${settings.ticker.backgroundColour}">${video.stream !== null ? video.stream.status : '...'}</div>
           ${videoBlock(video)}
           ${chatBox(state, emit)}
         </div>
