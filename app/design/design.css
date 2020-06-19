@@ -4,6 +4,12 @@
   font-style:normal;font-weight:400;
 }
 
+@font-face {
+    font-family:"Arial Rounded MT Bold";
+    src:url("/assets/fonts/Arial Rounded Bold.woff2") format("woff2"),url("/assets/fonts/Arial Rounded Bold.woff") format("woff"),url("/assets/fonts/Arial Rounded Bold.otf") format("opentype");
+    font-style:normal;font-weight:400;
+}
+
 :root {
   --ft-ss: 'Arial', sans-serif;
   --ft-ms: 'Not Courier', monospace;

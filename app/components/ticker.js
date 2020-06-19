@@ -21,7 +21,7 @@ class ticker extends nc {
     const fillText = filler.map(text => html`<span class="dbi pr0-3">${text}</span>`)
 
     return html`
-      <div id="smarquee-${data.side}" style="background-color: ${settings.ticker.backgroundColour}; color: ${settings.ticker.foregroundColour}" class="z1 py0-25 ${data.side === 'top' ? 'bsh-t' : 'bsh-b' }">
+      <div id="smarquee-${data.side}" style="background-color: ${settings.ticker.backgroundColour}; color: ${settings.ticker.foregroundColour}; font-family: ${settings.ticker.typeface}" class="z1 py0-25 ${data.side === 'top' ? 'bsh-t' : 'bsh-b' }">
         ${fillText}
       </div>
     `
