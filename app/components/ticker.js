@@ -1,6 +1,7 @@
 const html = require('choo/html')
 const nc = require('nanocomponent')
 const Smarquee = require('smarquee')
+const settings = require('../settings.json')
 
 class ticker extends nc {
   constructor (state, emit) {
@@ -17,10 +18,10 @@ class ticker extends nc {
     this.data = data
 
     const filler = Array.from(Array(data.n).fill(data.string))
-    const fillText = filler.map(text => html`<span class="dbi pr0-15">${text}</span>`)
+    const fillText = filler.map(text => html`<span class="dbi pr0-3">${text}</span>`)
 
     return html`
-      <div id="smarquee-${data.side}" class="z1 py0-25 bgc-yl ${data.side === 'top' ? 'bsh-t' : 'bsh-b' }">
+      <div id="smarquee-${data.side}" style="background-color: ${settings.ticker.backgroundColour}; color: ${settings.ticker.foregroundColour}" class="z1 py0-25 ${data.side === 'top' ? 'bsh-t' : 'bsh-b' }">
         ${fillText}
       </div>
     `
@@ -41,7 +42,7 @@ class ticker extends nc {
       },
     })
     smarquee.init()
-    this.state.components.ticker.push(smarquee) 
+    this.state.components.ticker.push(smarquee)
   }
 
   update () {

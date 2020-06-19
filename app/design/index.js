@@ -12,7 +12,7 @@ var root = `
 `
 
 var basic = gr8({
-  spacing: [0, 0.15, 0.25, 0.5, 1, 4.5],
+  spacing: [0, 0.15, 0.25, 0.3, 0.5, 1, 4.5],
   fontSize: [0.8, 1, 1.3, 2],
   lineHeight: [1],
   zIndex: [1, 2],
