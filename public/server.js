@@ -53,7 +53,7 @@ const createLiveStream = async () => {
 
   // create a new live stream!
   return await Video.LiveStreams.create({
-    test: true,
+    test: settings.stream.testmode,
     playback_policy: 'public',
     reconnect_window: 10,
     new_asset_settings: { playback_policy: 'public' } 
