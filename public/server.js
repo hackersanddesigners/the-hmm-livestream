@@ -138,7 +138,6 @@ app.get('/stream', async(req, res) => {
 })
 
 // -- mux-hook, listen to mux callbacks
-// auth, 
 app.post('/mux-hook', (req, res) => {
   console.log('mux-hook =>', req.body)
   STREAM.status = req.body.data.status
