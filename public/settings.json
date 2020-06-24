@@ -5,5 +5,8 @@
     "foregroundColour": "#fff",
     "typeface": "Arial Rounded MT Bold"
   },
-  "donateButton": false
+  "donateButton": false,
+  "stream": {
+    "testmode": true
+  }
 }

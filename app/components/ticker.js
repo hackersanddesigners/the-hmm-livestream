@@ -1,7 +1,7 @@
 const html = require('choo/html')
 const nc = require('nanocomponent')
 const Smarquee = require('smarquee')
-const settings = require('../settings.json')
+const settings = require('../../public/settings.json')
 
 class ticker extends nc {
   constructor (state, emit) {

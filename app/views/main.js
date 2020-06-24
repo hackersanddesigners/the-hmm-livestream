@@ -8,7 +8,7 @@ const Donate = require('../components/donate')
 const donate = new Donate()
 const Ticker = require('../components/ticker')
 const Viewers = require('../components/viewers')
-const settings = require('../settings.json')
+const settings = require('../../public/settings.json')
 const viewers = new Viewers()
 
 function view (state, emit) {

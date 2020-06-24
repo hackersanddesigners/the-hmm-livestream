@@ -1,4 +1,5 @@
 require('dotenv').config()
+const settings = require('./settings.json')
 const fs = require('fs').promises
 const path = require('path')
 const express = require('express')
