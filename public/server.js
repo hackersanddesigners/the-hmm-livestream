@@ -13,24 +13,8 @@ const db = require('lowdb')
 const FileAsync = require('lowdb/adapters/FileAsync')
 const http = require('http').Server(app)
 const socket = require('socket.io')(http)
-const { createMollieClient } = require('@mollie/api-client');
-const mollieClient = createMollieClient({ apiKey: process.env.MOLLIE_API_KEY });
-
-// const corsOptions = {
-//   origin: true,
-//   methods: ['POST'],
-//   allowedHeaders: 'Access-Control-Allow-Origin'
-// }
-// app.use(cors(corsOptions))
-
-// app.use(function(req, res, next) {
-//   res.header("Access-Control-Allow-Origin", "https://live.hackersanddesigners.nl/"); // update to match the domain you will make the request from
-//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-//   next();
-// });
 
 app.use('/assets', express.static(path.resolve(__dirname, 'assets')))
-
 app.use(express.json())
 
 // storage configuration
@@ -166,41 +150,46 @@ app.post('/mux-hook', (req, res) => {
   res.sendStatus(200)
 })
 
-app.post('/donate', async(req, res) => {
-  let data = req.body
-  console.log('data =>', data)
-  try {
-    const payment = await mollieClient.payments.create({
-      amount: {
-        currency: 'EUR',
-        value: data.amount,
-      },
-      metadata: {
-        order_id: Buffer.from(new Date(), 'utf8').toString('hex'),
-      },
-      description: data.description,
-      redirectUrl: process.env.MOLLIE_REDIRECT_URL,
-      webhookUrl: process.env.MOLLIE_WEBHOOK_URL
-    })
+if (settings.donate) {
+  const { createMollieClient } = require('@mollie/api-client');
+  const mollieClient = createMollieClient({ apiKey: process.env.MOLLIE_API_KEY });
 
-    console.log('donate-payment =>', payment)
-    res.send(payment)
-    // console.log('getPaymentUrl =>', payment._links.checkout)
-    // res.redirect(payment._links.checkout.url)
-  } catch (error) {
-    console.warn('donate-err =>', error)
-    res.send(error)
-  }
-})
+  app.post('/donate', async(req, res) => {
+    let data = req.body
+    console.log('data =>', data)
+    try {
+      const payment = await mollieClient.payments.create({
+        amount: {
+          currency: 'EUR',
+          value: data.amount,
+        },
+        metadata: {
+          order_id: Buffer.from(new Date(), 'utf8').toString('hex'),
+        },
+        description: data.description,
+        redirectUrl: process.env.MOLLIE_REDIRECT_URL,
+        webhookUrl: process.env.MOLLIE_WEBHOOK_URL
+      })
 
-app.post('/donate/webhook', async(req, res) => {
-  console.log('/donate/webhook =>', req.body)
-  // const payment = await mollieClient.payments.get(req.body.orderId)
-  // const data = await payment.json()
-  // console.log(data)
-  
-  res.sendStatus(200)
-})
+      console.log('donate-payment =>', payment)
+      res.send(payment)
+      // console.log('getPaymentUrl =>', payment._links.checkout)
+      // res.redirect(payment._links.checkout.url)
+    } catch (error) {
+      console.warn('donate-err =>', error)
+      res.send(error)
+    }
+  })
+
+  app.post('/donate/webhook', async(req, res) => {
+    console.log('/donate/webhook =>', req.body)
+    // const payment = await mollieClient.payments.get(req.body.orderId)
+    // const data = await payment.json()
+    // console.log(data)
+    
+    res.sendStatus(200)
+  })
+}
 
 // -- start
 initialize().then((stream) => {
