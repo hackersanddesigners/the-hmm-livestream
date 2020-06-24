@@ -106,13 +106,16 @@ some options can be changed by updating `app/setting.json`:
     "foregroundColour": "#fff",
     "typeface": "Arial Rounded"
   },
-  "donateButton": false
+  "donateButton": false,
+  "stream": {
+    "testmode": true
+  }
 }
 ```
 
-`ticker`:
+- `ticker`:
  - text
  - background and foreground color
  - typeface
- 
-if enabling or not the `donate button`.
+- enable or not the `donate button`
+- set stream’s testmode on or off
