@@ -41,9 +41,11 @@ the repo contains a `public` folder and an `app` folder. you need to first compi
   - then let’s run the app by doing `npm run start` (this runs the command `node server.js`, you can find it inside the `package.json` file in the `public` folder, under the `scripts` key). 
   - when the app talks with the MUX APIs, *the terminal will print the key we need to use with [OBS](ht*tps://obsproject.com/) to setup the connection between the computer that is going to stream and the stream created in our MUX account; let’s copy this key and put it inside the streaming configuration for OBS. this key is re-printed any time we run the app (by doing `npm run start`), so we can always double check in case we forget (this key is read from the `stream` file inside the `public/.data`)
   
-I suggest to also read through [the article](https://mux.com/articles/how-to-build-your-own-live-streaming-app-with-mux-video/) mentioned at the beginning, especially the final part on setting up the app with OBS.
-
+[this article](https://docs.mux.com/docs/configure-broadcast-software) explains how to setup OBS with MUX.
+  
 ## server
+
+create a webhook in MUX to be able to listen from the app, when the livestream starts and ends. check here for [docs](https://docs.mux.com/docs/webhooks).
 
 ### process management
 
