@@ -1,8 +1,8 @@
 {
   "ticker": {
-    "text": "BodyBuilding: A Platform in Transition |",
-    "backgroundColour": "rgba(255, 55, 5, 1)",
-    "foregroundColour": "#fff",
+    "text": "BodyBuilding @ FUSE |",
+    "backgroundColour": "#ffff00",
+    "foregroundColour": "#000",
     "typeface": "Arial Rounded MT Bold"
   },
   "logo": false,
