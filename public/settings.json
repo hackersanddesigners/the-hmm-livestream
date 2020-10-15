@@ -9,6 +9,7 @@
   "headline": "Inefficient Tool Building\nfor Quantified Beings",
   "donateButton": false,
   "stream": {
+    "active": false,
     "testmode": true
   }
 }
