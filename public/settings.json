@@ -5,6 +5,8 @@
     "foregroundColour": "#fff",
     "typeface": "Arial Rounded MT Bold"
   },
+  "logo": false,
+  "headline": "Inefficient Tool Building\nfor Quantified Beings",
   "donateButton": false,
   "stream": {
     "testmode": true

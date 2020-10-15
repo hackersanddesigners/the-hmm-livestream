@@ -1,5 +1,8 @@
 const html = require('choo/html')
 const raw = require('choo/html/raw')
+const md = require('markdown-it')({
+  breaks: true
+})
 const VideoPlayer = require('../components/video-player')
 const videoPlayer = new VideoPlayer()
 const Chat = require('../components/chat')
@@ -17,9 +20,7 @@ function view (state, emit) {
   return html`
     <body>
       <header>
-        <figure class="psr oh tac pt1">
-         <img src="/assets/logo.png" style="max-width: 100%; max-height: 6rem"> 
-        </figure>
+        ${header(settings)}
       </header>
       ${content(state, emit)} 
       <div class="x xdr xw xab xjb">
@@ -28,6 +29,22 @@ function view (state, emit) {
       </div>
     </body>
   ` 
+
+  function header (settings) {
+    if (settings.logo) {
+      return html`
+        <figure class="psr oh tac pt1">
+         <img src="/assets/logo.png" style="max-width: 100%; max-height: 9rem"> 
+        </figure>
+      `
+    } else {
+      return html`
+        <div class="mxw-headline p2 mxa tac ft-sr fs-headline w-headline psr">
+          ${raw(md.render(settings.headline))}
+        </div>
+      `
+    }
+  }
 
   function chatBox (state, emit) {
     const data = state.components.chat

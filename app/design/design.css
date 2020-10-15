@@ -12,6 +12,7 @@
 
 :root {
   --ft-ss: 'Arial', sans-serif;
+  --ft-sr: 'Arial Rounded MT Bold', sans-serif;
   --ft-ms: 'Not Courier', monospace;
   --c-wh: #fff;
   --c-yl: #ff0;
@@ -72,11 +73,19 @@ strong, b {
 }
 
 .ft-ss {
-    font-family: var(--ft-ss);
+  font-family: var(--ft-ss);
+}
+
+.ft-sr {
+  font-family: var(--ft-sr);
 }
 
 .ft-ms {
-    font-family: var(--ft-ms);
+  font-family: var(--ft-ms);
+}
+
+.fs-headline {
+  font-size: 2rem;
 }
 
 .l-999 {
@@ -107,6 +116,10 @@ strong, b {
   height: calc((9 / 16) * 100vw);
   max-height: calc(100vh - 250px);
   min-height: 480px;
+}
+
+.mxw-headline {
+  max-width: 39rem; 
 }
 
 @media screen and (min-width: 42rem) {
@@ -159,6 +172,11 @@ strong, b {
   overflow-wrap: break-word;
   word-wrap: break-word;
   hyphens: auto;
+}
+
+.mxa {
+  margin-right: auto;
+  margin-left: auto;
 }
 
 .mla {
