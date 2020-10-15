@@ -67,7 +67,6 @@ class chat extends nc {
       const input_message = form.querySelector('.message')
 
       let username = ''
-      console.log('input-username', input_username)
       if (input_username !== null) {
         username = input_username.value
         sessionStorage.setItem('username', input_username.value)
@@ -96,7 +95,6 @@ class chat extends nc {
       const chatList = e.originalTarget.previousElementSibling
       chatList.classList.remove('h-chat-db')
       chatList.classList.add('h-chat-sg')
-      console.log('chatList =>', chatList)
     }
 
     function storageAvailable (type) {
