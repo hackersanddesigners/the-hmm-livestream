@@ -35,7 +35,7 @@ the repo contains a `public` folder and an `app` folder. you need to first compi
   - `MOLLIE_WEBHOOK_URL`: set a full url to use with Mollie’s Webhook system, eg `https://live.hackersanddesigners.nl/donate/webhook`
 6. you can set whether the MUX stream is in `test-mode` or not, by changing the boolean on line 71 of `public/server.js`
 7. for completeness, there is a `.data` folder inside `public` with two files: `db.json` and `stream`; both are created automatically, the first when the first chat message is sent, the second when we’ll run the app and the backend will talk with the MUX APIs to setup a new stream (if the stream file is found, it will be used instead)
-  - you can reset the chat history by deleting the `db.json` file
+  - you can reset the chat history by deleting the `db.json` file and restarting the p2m process
 8. finally, from inside the `public` folder:
   - let’s first do `npm install` to get all the necessary packages
   - then let’s run the app by doing `npm run start` (this runs the command `node server.js`, you can find it inside the `package.json` file in the `public` folder, under the `scripts` key). 
@@ -108,16 +108,23 @@ some options can be changed by updating `app/setting.json`:
     "foregroundColour": "#fff",
     "typeface": "Arial Rounded"
   },
+  "logo": false,
+  "headline": "Inefficient Tool Building\nfor Quantified Beings",
   "donateButton": false,
   "stream": {
+    "active": true,
     "testmode": true
   }
 }
 ```
 
 - `ticker`:
- - text
- - background and foreground color
- - typeface
+ - set text
+ - set background and foreground color
+ - set typeface
+- `logo`: use image for logo, or not
+- `headline`: instead of an image logo, use *real* text; this is rendered as markdown, eg you can force a newline by adding `\n`
 - enable or not the `donate button`
-- set stream’s testmode on or off
+- `stream`: 
+  - `active`: if setting this to true, the chat is displayed, else it’s not; useful when keeping the website online but without any stream going. prevents from possible “random chat abuse”.
+  -  `testmode`: set stream on or off
