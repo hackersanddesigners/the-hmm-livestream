@@ -1,13 +1,22 @@
 @font-face {
   font-family:'NotCourier';
   src:url('/assets/fonts/NotCourierSans.woff2') format('woff2'),url('/assets/fonts/NotCourierSans.woff') format('woff'),url('/assets/fonts/NotCourierSans.otf') format('opentype');
-  font-style:normal;font-weight:400;
+  font-style:normal;
+  font-weight:400;
 }
 
 @font-face {
-    font-family:"Arial Rounded MT Bold";
-    src:url("/assets/fonts/Arial Rounded Bold.woff2") format("woff2"),url("/assets/fonts/Arial Rounded Bold.woff") format("woff"),url("/assets/fonts/Arial Rounded Bold.otf") format("opentype");
-    font-style:normal;font-weight:400;
+  font-family:"Arial Rounded MT Bold";
+  src:url("/assets/fonts/Arial Rounded Bold.woff2") format("woff2"),url("/assets/fonts/Arial Rounded Bold.woff") format("woff"),url("/assets/fonts/Arial Rounded Bold.otf") format("opentype");
+  font-style:normal;
+  font-weight:400;
+}
+
+@font-face {
+  font-family:"Compagnon Roman";
+  src:url("/assets/fonts/Compagnon-Roman.woff2") format("woff2"),url("/assets/fonts/Compagnon-Roman.woff") format("woff"),url("/assets/fonts/Compagnon-Roman.otf") format("opentype");
+  font-style:normal;
+  font-weight:400;
 }
 
 :root {
