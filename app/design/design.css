@@ -23,6 +23,7 @@
   --ft-ss: 'Arial', sans-serif;
   --ft-sr: 'Arial Rounded MT Bold', sans-serif;
   --ft-ms: 'Not Courier', monospace;
+  --ft-cr: 'Compagnon Roman', monospace;
   --c-wh: #fff;
   --c-yl: #ff0;
   --c-bl: blue;
@@ -91,6 +92,10 @@ strong, b {
 
 .ft-ms {
   font-family: var(--ft-ms);
+}
+
+.ft-cr {
+  font-family: var(--ft-cr);
 }
 
 .fs-headline {

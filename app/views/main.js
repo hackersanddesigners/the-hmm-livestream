@@ -39,7 +39,7 @@ function view (state, emit) {
       `
     } else {
       return html`
-        <div class="mxw-headline p2 mxa tac ft-sr fs-headline w-headline psr">
+        <div class="mxw-headline p2 mxa tac ft-cr fs-headline w-headline psr">
           ${raw(md.render(settings.headline))}
         </div>
       `
