@@ -4,3 +4,4 @@ node_modules
 .data
 public/assets/*.css
 public/assets/*.js
+rsync
