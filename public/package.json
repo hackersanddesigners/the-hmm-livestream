@@ -9,14 +9,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@mollie/api-client": "^3.1.0",
-    "@mux/mux-node": "^2.8.0",
+    "@mollie/api-client": "^3.4.0",
+    "@mux/mux-node": "^3.1.3",
     "basic-auth": "^2.0.1",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "lowdb": "^1.0.0",
-    "socket.io": "^2.3.0"
+    "socket.io": "^2.4.1"
   }
 }
