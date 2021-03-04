@@ -5,8 +5,10 @@ single-page app to livestream The Hmm events.
 starting off from [this codebase](https://mux.com/articles/how-to-build-your-own-live-streaming-app-with-mux-video/), but heavily deformed it along the way.
 
 ## setup
+## License
 
 the app runs on node.js (`v13.6.0`). depending on where you install this code, i suggest to use [nvm](https://github.com/nvm-sh/nvm) to manage different node version on the same machine. else just make sure to have node v13 installed.
+If you use this codebase to build a livestream platform, please credit with the following text: "This codebase has been initially developed as part of a collaboration between Hackers and Designers and The Hmm. The source code is licensed under MIT".
 
 the repo contains a `public` folder and an `app` folder. you need to first compile the code in the app folder, which handles the frontend of the app, and then run the main app inside the public folder.
 
