@@ -1,11 +1,7 @@
 const html = require('choo/html')
 const formatDate = require('../utils/formatDate')
 const raw = require('choo/html/raw')
-const md = require('markdown-it')({
-  breaks: true,
-  typographer: true,
-  linkify: true
-})
+const md = require('../utils/markdown')
 
 function chatMsg (msg) {
   return html`
@@ -13,7 +9,7 @@ function chatMsg (msg) {
       <time datetime="${formatDate(msg.timestamp).iso}" class="ft-ms fs0-8">${formatDate(msg.timestamp).date}</time>
       <div class="pl1">
         <span>${msg.username}:</span>
-        ${raw(md.render(msg.value))}
+        ${raw(md(msg.value))}
       </div>
     </div>
   ` 
