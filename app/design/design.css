@@ -75,8 +75,20 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.copy p+p {
+.copy p+p,
+.copy p+ul {
   padding-top: 1rem;
+}
+
+.copy ul {
+  padding-bottom: 1rem;
+  padding-left: 2.5rem;
+  margin-left: -1.5rem;
+}
+
+.copy ul li {
+  padding-left: 0.5rem;
+  padding-bottom: 0.25rem;
 }
 
 .ft-ss {
@@ -198,4 +210,8 @@ body {
 
 .mla {
   margin-left: auto;
+}
+
+.mba {
+  margin-bottom: auto;
 }
