@@ -23,18 +23,21 @@ class chat extends nc {
     this.emit = emit
     this.data = data
 
+    const isChatMessageVisible = sessionStorage.getItem('username') !== null ? '' : 'dn '
+
     return html`
       <div class="${data.toggle ? 'x xdc h100' : 'dn'}">
         ${storage()}
-        <div class="chat-wrap ${sessionStorage.getItem('username') !== null ? 'h-chat-sg' : 'h-chat-db'} p0-5 oys">
-          <div class="p0-5 chat-list oxh">${msgList(data.posts)}</div>
+        <div class="chat-wrap ${sessionStorage.getItem('username') !== null ? 'h-chat-sg' : 'h-chat-db op25'} p0-5 oys">
+          <div class="chat-list oxh">${msgList(data.posts)}</div>
         </div>
         <form onsubmit=${onsubmit} method="post" class="x xdr xafe p0-5 bt-wh bgc-bl">
           <div class="x xdc w100">
-            <input required class="message w100" type="text" placeholder="Type here to send a message">
             ${inputUsername(sessionStorage.getItem('username'))}
+            <label class="${isChatMessageVisible}" for="chat-message"></label>
+            <textarea id="chat-message" name="chat-message" required onkeydown=${onsubmit} class="message ${isChatMessageVisible}w100 bgc-db p0-25" type="text" placeholder="Type here to send a message, then press Enter"></textarea>
           </div>
-          <input class="curp pl0-5 md-psf md-t0 md-l-999" type="submit" value="Send">
+          <input class="curp pl0-5 dn md-psf md-t0 md-l-999" type="submit" value="Send">
         </form>
       </div>
     `
@@ -80,41 +83,32 @@ class chat extends nc {
     }
 
     function onsubmit (e) {
-      e.preventDefault()
-      const form = e.currentTarget
+      // run this only if Enter is pressed
+      if (e.which === 13 && !e.shiftKey) {
+        e.preventDefault()
+      
+        const form = e.target.form
 
-      const input_username = form.querySelector('.username')
-      const input_message = form.querySelector('.message')
+        const input_message = form.querySelector('.message')
+        const username = sessionStorage.getItem('username')
 
-      let username = ''
-      if (input_username !== null) {
-        username = input_username.value
-        sessionStorage.setItem('username', input_username.value)
-      } else if (sessionStorage.getItem('username') !== null) {
-        username = sessionStorage.getItem('username')
+        const msg = {
+          timestamp: new Date(),
+          username: username,
+          value: input_message.value
+        }
+
+        // send msg to db + append it to chat w/o app re-render
+        state.components.socket.emit('chat-msg', msg)
+
+        // clear input-message
+        input_message.value = ''
+
+        // set correct chat-list height
+        const chatList = e.originalTarget.previousElementSibling
+        chatList.classList.remove('h-chat-db')
+        chatList.classList.add('h-chat-sg')
       }
-
-      const msg = {
-        timestamp: new Date(),
-        username: username,
-        value: input_message.value
-      }
-
-      // send msg to db + append it to chat w/o app re-render
-      state.components.socket.emit('chat-msg', msg)
-
-      // hide input-username
-      if (input_username !== null) {
-        input_username.classList.add('dn')
-      }
-
-      // clear input-message
-      input_message.value = ''
-
-      // set correct chat-list height
-      const chatList = e.originalTarget.previousElementSibling
-      chatList.classList.remove('h-chat-db')
-      chatList.classList.add('h-chat-sg')
     }
 
     function storageAvailable (type) {
