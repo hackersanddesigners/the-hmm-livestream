@@ -5,4 +5,5 @@ node_modules
 public/assets/*.css
 public/assets/*.js
 public/settings.json
+public/files
 rsync
