@@ -31,21 +31,41 @@ class chat extends nc {
         </div>
         <form onsubmit=${onsubmit} method="post" class="x xdr xafe p0-5 bt-wh bgc-bl">
           <div class="x xdc w100">
-            ${setUsername(sessionStorage.getItem('username'))}
             <input required class="message w100" type="text" placeholder="Type here to send a message">
+            ${inputUsername(sessionStorage.getItem('username'))}
           </div>
           <input class="curp pl0-5 md-psf md-t0 md-l-999" type="submit" value="Send">
         </form>
       </div>
     `
 
-    function setUsername (username) {
+    function inputUsername (username) {
       if (username === null) {
         return html`
-          <input required class="username" type="text" placeholder="Pick a username">
+          <input required class="username bgc-db p0-25" type="text" placeholder="Pick a username" onkeydown=${setUsername}>
         `
       }
-    } 
+    }
+
+    function setUsername (e) {
+      // run this only if Enter is pressed
+      console.log('aa =>', e)
+      if (e.which === 13) {
+        e.preventDefault()
+
+        const input_username = e.target.value
+
+        let username = ''
+        if (input_username !== '') {
+          username = input_username
+          sessionStorage.setItem('username', input_username)
+        } else if (sessionStorage.getItem('username') !== null) {
+          username = sessionStorage.getItem('username')
+        }
+
+        emit('chat-set-username', username)
+      }
+    }
 
     function msgList (data) {
       if (data.length > 0) {

@@ -55,6 +55,11 @@ function stream (state, emitter) {
     emitter.emit('render')
   })
 
+  emitter.on('chat-set-username', (username) => {
+    state.components.chat.username = username
+    emitter.emit('render')
+  })
+
   socket.on('chat-msg', (msg) => {
     state.components.chat.posts.push(msg)
     const chatList = document.querySelector('.chat-list')
