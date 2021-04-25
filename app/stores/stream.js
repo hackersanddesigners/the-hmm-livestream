@@ -18,7 +18,10 @@ function stream (state, emitter) {
     toggle: false,
     username: undefined,
     posts: [],
-    userCount: 0
+    urls: [],
+    download: '',
+    userCount: 0,
+    view: false
   }
 
   state.components.donate = {
@@ -48,6 +51,15 @@ function stream (state, emitter) {
     } else {
       return posts.status
     }
+
+    const urls = await fetch('/posts/url')
+    if (urls.ok) {
+      const data = await urls.json()
+      state.components.chat.urls = data
+      emitter.emit('render')
+    } else {
+      return urls.status
+    }
   })
 
   emitter.on('chat-toggle', () => {
@@ -64,6 +76,31 @@ function stream (state, emitter) {
     state.components.chat.posts.push(msg)
     const chatList = document.querySelector('.chat-list')
     appendMsg(chatList, msg)
+
+    // update URL list too
+    const URLmatch = new RegExp("([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?([^ ])+")
+    const postURL = msg.value.match(URLmatch)
+
+    if (postURL !== null) {
+      state.components.chat.url.push(postURL)
+    }
+  })
+
+  emitter.on('chat-view-toggle', async() => {
+    // false => show normal chat (msg)
+    // true => show URLs
+
+    // fetch download file URL
+    const downloadURL = await fetch('/api/get-chat-urls')
+    if (downloadURL.ok) {
+      const data = await downloadURL.json()
+      state.components.chat.download = data.url
+    } else {
+      return downloadURL.status
+    }
+
+    state.components.chat.view =! state.components.chat.view
+    emitter.emit('render')
   })
 
   socket.on('user-count', (count) => {

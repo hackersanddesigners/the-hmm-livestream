@@ -28,19 +28,50 @@ class chat extends nc {
     return html`
       <div class="${data.toggle ? 'x xdc h100' : 'dn'}">
         ${storage()}
-        <div class="chat-wrap ${sessionStorage.getItem('username') !== null ? 'h-chat-sg' : 'h-chat-db op25'} p0-5 oys">
-          <div class="chat-list oxh">${msgList(data.posts)}</div>
-        </div>
-        <form onsubmit=${onsubmit} method="post" class="x xdr xafe p0-5 bt-wh bgc-bl">
-          <div class="x xdc w100">
-            ${inputUsername(sessionStorage.getItem('username'))}
-            <label class="${isChatMessageVisible}" for="chat-message"></label>
-            <textarea id="chat-message" name="chat-message" required onkeydown=${onsubmit} class="message ${isChatMessageVisible}w100 bgc-db p0-25" type="text" placeholder="Type here to send a message, then press Enter"></textarea>
-          </div>
-          <input class="curp pl0-5 dn md-psf md-t0 md-l-999" type="submit" value="Send">
-        </form>
+        ${chatView(data)}
+        ${inputForm(data.view, isChatMessageVisible)}
+        <button type="button" onclick=${chatViewToggle(emit)} class="curp fs0-8 x xdr xafe px0-25 py0-5 bt-wh bgc-bl">${data.view ? 'Show chat' : 'Show only URLs'}</button>
       </div>
     `
+
+    function inputForm (chatView, isChatMessageVisible) {
+      if (chatView === false) {
+        return html`
+          <form onsubmit=${onsubmit} method="post" class="x xdc bt-wh bgc-bl mba">
+            ${inputUsername(sessionStorage.getItem('username'))}
+            <label class="${isChatMessageVisible}" for="chat-message"></label>
+            <textarea id="chat-message" name="chat-message" required onkeydown=${onsubmit} class="message ${isChatMessageVisible}w100 bgc-db px0-5 py0-25" style="resize:vertical" type="text" placeholder="Type here to send a message, then press Enter"></textarea>
+            <input class="curp pl0-5 dn md-psf md-t0 md-l-999" type="submit" value="Send">
+          </form>
+        `
+      }
+    }
+
+    function chatView (data) {
+      if (data.view) {
+        return html`
+          <div class="chat-wrap ${sessionStorage.getItem('username') !== null ? 'h-chat-sg' : 'h-chat-db op25'} p0-5 oys copy ow mba">
+            <p class="pt1">List of shared URLs from the chat:</p>
+            <ul class="url-list oxh">${urlList(data.urls)}</ul>
+            ${downloadButton(data.urls, data.download)}
+          </div>
+        `
+      } else {
+        return html`
+          <div class="chat-wrap ${sessionStorage.getItem('username') !== null ? 'h-chat-sg' : 'h-chat-db op25'} p0-5 oys">
+            <div class="chat-list oxh">${msgList(data.posts)}</div>
+          </div>
+        `
+      }
+
+      function downloadButton (urls, download) {
+        if (urls.length > 0) {
+          return html`
+            <a href="${download}" download="" target="_blank">Download as HTML file</a>
+          `
+        }
+      }
+    }
 
     function inputUsername (username) {
       if (username === null) {
@@ -77,7 +108,21 @@ class chat extends nc {
         })
       } else {
         return html`
-          <div><p>no message yet</p></div>
+          <div><p class="pt1">No message yet.</p></div>
+        `
+      }
+    }
+
+    function urlList (data) {
+      if (data.length > 0) {
+        return data.map(url => {
+          return html`
+            <li><a href="${url}" target="_blank">${url}</a></li>
+          `
+        })
+      } else {
+        return html`
+          <p>No URL has been shared yet.</p>
         `
       }
     }
@@ -102,7 +147,7 @@ class chat extends nc {
         state.components.socket.emit('chat-msg', msg)
 
         // clear input-message
-        input_message.value = ''
+        input_message.value = '' 
 
         // set correct chat-list height
         const chatList = e.originalTarget.previousElementSibling
@@ -142,10 +187,18 @@ class chat extends nc {
       }
     }
 
+    function chatViewToggle (emit) {
+      return () => {
+        emit('chat-view-toggle')
+      }
+    }
+
   }
 
   load (el) {
-    const chatWrap = el.querySelector('.chat-wrap')
+    if (this.state.components.chat.view === false) {
+      const chatWrap = el.querySelector('.chat-wrap')
+    }
   }
 
   update () {
@@ -153,8 +206,10 @@ class chat extends nc {
   }
 
   afterupdate(el) {
-    const chatList = el.querySelector('.chat-list')
-    chatList.scrollIntoView(false)
+    if (this.state.components.chat.view === false) {
+      const chatList = el.querySelector('.chat-list')
+      chatList.scrollIntoView(false)
+    }
   }
 }
 
