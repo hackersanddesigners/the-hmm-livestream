@@ -1,6 +1,7 @@
 require('dotenv').config()
 const settings = require('./settings.json')
 const fs = require('fs').promises
+const fsextra = require('fs-extra');
 const path = require('path')
 const express = require('express')
 const cors = require('cors')
@@ -13,12 +14,17 @@ const db = require('lowdb')
 const FileAsync = require('lowdb/adapters/FileAsync')
 const http = require('http').Server(app)
 const socket = require('socket.io')(http)
+const nunjucks = require('nunjucks')
 
 app.use('/assets', express.static(path.resolve(__dirname, 'assets')))
+app.use(express.static(path.resolve(__dirname, 'files')))
 app.use(express.json())
 
 // storage configuration
 const stateFilePath = './.data/stream'
+
+// <https://stackoverflow.com/a/26345063>
+const URLmatch = new RegExp("([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?([^ ])+")
 
 // authentication configuration
 const webhookUser = {
@@ -121,8 +127,15 @@ db(adapter)
 
       return db.defaults({posts: [] }).write()
     })
-    
+
   })
+
+
+// HTML templating
+nunjucks.configure('views', {
+  autoescape: true,
+  express: app
+});
 
 // serve index.html with choo app
 app.get('/', (req, res) => {
@@ -135,6 +148,77 @@ app.get('/stream', async(req, res) => {
   res.json(
     publicStreamDetails(stream)
   )
+})
+
+// -- /chat-reference, export all links shared in the chat
+app.get('/api/get-chat-urls', async(req, res) => {
+  // 1. open stream / file `db.json`
+  // 2. parse all URLs
+  // 3. create .html
+  // 4. send back URL download
+
+  try {
+    const data = await fs.readFile('./.data/db.json', 'utf8')
+    const chatLog = JSON.parse(data)
+
+    // before generating a new html file,
+    // check if an existing one outputted after the last chat-msg exists
+    
+    const exportFiles = await fs.readdir(path.resolve(__dirname, 'files/export'));
+    const exportFileLast = exportFiles[exportFiles.length -1]
+    const exportFileStat = await fs.stat(path.resolve(__dirname, `files/export/${exportFileLast}`))
+
+    const chatMsgLast = chatLog.posts[chatLog.posts.length -1]
+
+    const localhost = `http://${req.get('host')}`
+
+    console.log(chatMsgLast.value.match(URLmatch) === null, new Date(chatMsgLast.timestamp), '>', new Date(exportFileStat['ctime']), '=>', new Date(chatMsgLast.timestamp) > new Date(exportFileStat['ctime']))
+
+    // check if chat-last-msg contains one or more URLs,
+    // and if chat-last-mgs timestamp is newer than chat-list.html export time
+    if (chatMsgLast.value.match(URLmatch) !== null && new Date(chatMsgLast.timestamp) > new Date(exportFileStat['ctime'])) {
+
+      const URLs = getURLfromPost(chatLog.posts)
+
+      const date = new Date();
+      const dateNow = date.toISOString().replace(/:/g, '').split('.')[0]
+      const chatLinksFile = nunjucks.render('chat-urls.html', {
+        title: settings.title, 
+        headline: settings.headline.replace(/\n/g, ' '),
+        date: dateNow,
+        urls: URLs
+      });
+
+      // create export folder is does not exist
+      fsextra.ensureDirSync(path.resolve(__dirname, 'files/export'))
+
+      // write chat-links.html export file to disk
+      await fs.writeFile(path.resolve(__dirname, `files/export/${dateNow}.html`), chatLinksFile)
+
+      res.send({
+        message: 'URLs not exported yet',
+        url: `${localhost}/export/${exportFileLast}`
+      })
+
+    } else {
+
+      const URLs = getURLfromPost(chatLog.posts)
+      
+      res.send({
+        message: 'URLs already exported',
+        url: `${localhost}/export/${exportFileLast}`,
+      })
+
+    }
+
+  } catch (err) {
+    console.log('err =>', err)
+    res.status(500).send({
+      error: err,
+      message : 'The file does not exist'
+    })
+  }
+
 })
 
 // -- mux-hook, listen to mux callbacks
@@ -188,6 +272,20 @@ if (settings.donate) {
     
     res.sendStatus(200)
   })
+}
+
+function getURLfromPost(posts) {
+  const URLs = []
+
+  posts.map(post => {
+    return post.value.match(URLmatch)
+  }).filter(item => {
+    if (item !== null) {
+      URLs.push(item[0])
+    }
+  })
+
+  return URLs
 }
 
 // -- start
