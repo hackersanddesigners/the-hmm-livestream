@@ -172,9 +172,12 @@ app.get('/api/get-chat-urls', async(req, res) => {
     // before generating a new html file,
     // check if an existing one outputted after the last chat-msg exists
     
-    const exportFiles = await fs.readdir(path.resolve(__dirname, 'files/export'));
+    const exportFiles = await fs.readdir(path.resolve(__dirname, process.env.EXPORT_FOLDER));
     const exportFileLast = exportFiles[exportFiles.length -1]
-    const exportFileStat = await fs.stat(path.resolve(__dirname, `files/export/${exportFileLast}`))
+    const exportFileStat = await fs.stat(path.resolve(__dirname, `${process.env.EXPORT_FOLDER}/${exportFileLast}`))
+
+    // used to build final url path to access HTML file
+    const exportURLfragment = process.env.EXPORT_FOLDER.split('/').slice(-1)[0]
 
     const chatMsgLast = chatLog.posts[chatLog.posts.length -1]
 
@@ -197,15 +200,15 @@ app.get('/api/get-chat-urls', async(req, res) => {
         urls: URLs
       });
 
-      // create export folder is does not exist
-      fsextra.ensureDirSync(path.resolve(__dirname, 'files/export'))
+      // create export folder if does not exist
+      fsextra.ensureDirSync(path.resolve(__dirname, process.env.EXPORT_FOLDER))
 
       // write chat-links.html export file to disk
-      await fs.writeFile(path.resolve(__dirname, `files/export/${dateNow}.html`), chatLinksFile)
+      await fs.writeFile(path.resolve(__dirname, `${process.env.EXPORT_FOLDER}/${dateNow}.html`), chatLinksFile) 
 
       res.send({
         message: 'URLs not exported yet',
-        url: `${localhost}/export/${exportFileLast}`
+        url: `${localhost}/${exportURLfragment}/${exportFileLast}`
       })
 
     } else {
@@ -214,7 +217,7 @@ app.get('/api/get-chat-urls', async(req, res) => {
       
       res.send({
         message: 'URLs already exported',
-        url: `${localhost}/export/${exportFileLast}`,
+        url: `${localhost}/${exportURLfragment}/${exportFileLast}`,
       })
 
     }
