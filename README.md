@@ -106,6 +106,8 @@ Some options can be changed by updating `app/setting.json`:
 
 ```
 {
+  "title": "Hackers & Designers livestream",
+  "headline": "Inefficient Tool Building\nfor Quantified Beings",
   "ticker": {
     "text": "BodyBuilding: A Platform in Transition |",
     "backgroundColour": "rgba(255, 55, 5, 1)",
@@ -113,7 +115,6 @@ Some options can be changed by updating `app/setting.json`:
     "typeface": "Arial Rounded"
   },
   "logo": false,
-  "headline": "Inefficient Tool Building\nfor Quantified Beings",
   "donateButton": false,
   "stream": {
     "active": true,
@@ -122,12 +123,13 @@ Some options can be changed by updating `app/setting.json`:
 }
 ```
 
+- `title`: stream title, for now used when outputting an HTML page with the list of links from a stream's chat
+- `headline`: instead of an image logo, use *real* text; this is rendered as markdown, eg you can force a newline by adding `\n`; this is also used when outputting an HTML page with the list of links from a stream's chat — if any `\n` is used to correctly typeset the text for the frontpage, when used in the HTML output document any `\n` is replaced by ` ` (whitespace, aka `\s` in regex syntax)
 - `ticker`:
  - set text
  - set background and foreground color
  - set typeface
 - `logo`: use image for logo, or not
-- `headline`: instead of an image logo, use *real* text; this is rendered as markdown, eg you can force a newline by adding `\n`
 - enable or not the `donate button`
 - `stream`: 
   - `active`: if setting this to true, the chat is displayed, else it’s not; useful when keeping the website online but without any stream going. prevents from possible “random chat abuse”.
