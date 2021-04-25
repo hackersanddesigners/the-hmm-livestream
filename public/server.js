@@ -100,9 +100,9 @@ db(adapter)
   .then(db => {
     // -- /posts
     app.get('/posts', async(req, res) => {
-      const posts = db.get('posts')
+      const posts = db.get('posts').value()
       res.send(posts)
-    }) 
+    })
 
     // -- /posts/urls
     app.get('/posts/url', async(req, res) => {
