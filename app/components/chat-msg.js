@@ -7,8 +7,8 @@ function chatMsg (msg) {
   return html`
     <div class="x xdc xw pb1 ow">
       <time datetime="${formatDate(msg.timestamp).iso}" class="ft-ms fs0-8">${formatDate(msg.timestamp).date}</time>
-      <div class="pl1">
-        <span>${msg.username}:</span>
+      <div class="pl1 copy">
+        <em>${msg.username}:</em>
         ${raw(md(msg.value))}
       </div>
     </div>

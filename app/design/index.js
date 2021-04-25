@@ -7,6 +7,7 @@ var root = `
   --c-wh: #fff;
   --c-yl: #ff0;
   --c-bl: blue;
+  --c-db: #0a0ab7;
   --c-bk: #000;
 }
 `
@@ -32,6 +33,7 @@ var color = {
   vals: [
     { wh: 'var(--c-wh)' },
     { yl: 'var(--c-yl)' },
+    { db: 'var(--c-db)' },
     { bl: 'var(--c-bl)' },
     { bk: 'var(--c-bk)' }
   ],

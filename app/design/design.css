@@ -39,6 +39,7 @@ a {
 }
 
 input,
+textarea,
 button {
   border: none;
   border-top-left-radius: 0;
@@ -74,12 +75,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-em, i {
-  font-family: var(--ft-it);
-}
-
-strong, b {
-  font-family: var(--ft-bd);
+.copy p+p {
+  padding-top: 1rem;
 }
 
 .ft-ss {
