@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en-US">
+  <head><meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <link href=data:, rel=icon>
+
+    <title>{{title}}</title>
+  </head>
+  <body>
+    <h1>{{title}}</h1>
+    <p>During the livestream <em>{{headline}}</em>, these links have been shared in the chat:</p>
+    <ul>
+      {% if urls > 0 %}
+        {% for url in urls %}
+        <li><a href="{{url}}">{{url}}</a></li>
+        {% endfor %}
+      {% else %}
+        <p>There are not URLs</p>
+      {% endif %}
+    </ul>
+    <footer>Generated on {{date}}</footer>
+  </body>
+</html>
