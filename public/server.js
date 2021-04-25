@@ -104,6 +104,14 @@ db(adapter)
       res.send(posts)
     }) 
 
+    // -- /posts/urls
+    app.get('/posts/url', async(req, res) => {
+      const posts = db.get('posts').value()
+      const URLs = getURLfromPost(posts)
+
+      res.send(URLs)
+    })
+
     // -- socket.io
     socket.on('connection', (sock) => {
       const userCount = sock.client.conn.server.clientsCount
