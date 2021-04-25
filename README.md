@@ -24,19 +24,22 @@ The repo contains a `public` folder and an `app` folder. You need to first compi
    - To be sure all is done, let’s do `cd/assets && ls` and check the files `bundle.js` and `bundle.css` are there
 5. After this, open the `.env` file inside the `public` folder and add the necessary values after each key
 
-  ```
-  MUX_TOKEN_ID=
-  MUX_TOKEN_SECRET=
-  MOLLIE_API_KEY=
-  MOLLIE_REDIRECT_URL=
-  MOLLIE_WEBHOOK_URL=
-  ```
+```
+MUX_TOKEN_ID=
+MUX_TOKEN_SECRET=
+MOLLIE_API_KEY=
+MOLLIE_REDIRECT_URL=
+MOLLIE_WEBHOOK_URL=
+EXPORT_FOLDER=files/export
+```
   
   - `MUX_TOKEN_ID`: get this value when creating a new api key from the MUX account
   - `MUX_TOKEN_SECRET`: get this value when creating a new api key from the MUX account
   - `MOLLIE_API_KEY`: get this value when creating a new api key from the Mollie account
   - `MOLLIE_REDIRECT_URL`: set a full url for the page Mollie should redirect to after the payment checkout is done, eg `https://live.hackersanddesigners.nl`
   - `MOLLIE_WEBHOOK_URL`: set a full url to use with Mollie’s Webhook system, eg `https://live.hackersanddesigners.nl/donate/webhook`
+  - `EXPORT_FOLDER`: path to folder used for the exported HTML documents that contain a list of shared URLs from a given stream, eg `files/export`; in the frontend app only `export` is used when accessing the HTML files but express.js needs a root folder out of which to serve static files
+
 6. You can set whether the MUX stream is in `test-mode` or not, by changing the boolean on line 71 of `public/server.js`
 7. For completeness, there is a `.data` folder inside `public` with two files: `db.json` and `stream`; both are created automatically, the first when the first chat message is sent, the second when we’ll run the app and the backend will talk with the MUX APIs to setup a new stream (if the stream file is found, it will be used instead)
   - You can reset the chat history by deleting the `db.json` file and restarting the p2m process
