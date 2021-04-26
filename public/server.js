@@ -342,6 +342,7 @@ async function writeDocument(urls, dateNow) {
   // write chat-links.html export file to disk
   try {
     await fs.writeFile(path.resolve(__dirname, `${process.env.EXPORT_FOLDER}/${dateNow}.html`), chatLinksFile)
+
   } catch (err) {
     throw err
   }
