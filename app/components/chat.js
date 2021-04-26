@@ -50,7 +50,7 @@ class chat extends nc {
     function chatView (data) {
       if (data.view) {
         return html`
-          <div class="chat-wrap ${sessionStorage.getItem('username') !== null ? 'h-chat-sg' : 'h-chat-db op25'} p0-5 oys copy ow mba">
+          <div class="chat-wrap ${sessionStorage.getItem('username') !== null ? 'h-chat-sg' : 'h-chat-db'} p0-5 oys copy ow mba">
             <p class="pt1">List of shared URLs from the chat:</p>
             <ul class="url-list oxh">${urlList(data.urls)}</ul>
             ${downloadButton(data.urls, data.download)}
@@ -58,7 +58,7 @@ class chat extends nc {
         `
       } else {
         return html`
-          <div class="chat-wrap ${sessionStorage.getItem('username') !== null ? 'h-chat-sg' : 'h-chat-db op25'} p0-5 oys">
+          <div class="chat-wrap ${sessionStorage.getItem('username') !== null ? 'h-chat-sg' : 'h-chat-db'} p0-5 oys">
             <div class="chat-list oxh">${msgList(data.posts)}</div>
           </div>
         `
