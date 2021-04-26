@@ -112,14 +112,14 @@ db(adapter)
       res.send(urls)
     })
 
-    // -- /chat-reference, export all links shared in the chat
+    // -- /api/get-chat-urls, export all links shared in the chat
     app.get('/api/get-chat-urls', async(req, res) => {
       // 1. get posts
       // 2. parse all URLs
       // 3. create .html
       // 4. send back URL download 
 
-      try { 
+      try {
 
         // create export folder if does not exist
         const exportFolder = path.resolve(__dirname, process.env.EXPORT_FOLDER)
@@ -130,15 +130,26 @@ db(adapter)
 
         if (urls.length > 0) {
 
-        // get list of files from export-folder
-        const exportFiles = await fs.readdir(exportFolder)
+          // before generating a new html file,
+          // check if an existing one outputted after the last chat-msg exists
 
-        const localhost = `http://${req.get('host')}`
-        const documentURL = await exportDoc(exportFiles, exportFolder, posts, localhost) 
+          // get list of files from export-folder
+          const exportFiles = await fs.readdir(exportFolder)
 
-        res.send({
-          url: documentURL
-        })
+          const localhost = `http://${req.get('host')}`
+          const documentURL = await exportDoc(exportFiles, exportFolder, posts, localhost) 
+
+          res.send({
+            url: documentURL
+          })
+
+        } else {
+          res.status(500).send({
+            message: 'There are no URLs yet.',
+            url: ''
+          })
+
+        }
 
       } catch (err) {
         console.log('err =>', err)
