@@ -82,8 +82,10 @@ function stream (state, emitter) {
     const postURL = msg.value.match(URLmatch)
 
     if (postURL !== null) {
-      state.components.chat.url.push(postURL)
+      state.components.chat.urls.push(postURL)
+      emitter.emit('render')
     }
+
   })
 
   emitter.on('chat-view-toggle', async() => {
