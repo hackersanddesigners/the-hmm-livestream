@@ -107,9 +107,9 @@ db(adapter)
     // -- /posts/urls
     app.get('/posts/url', async(req, res) => {
       const posts = db.get('posts').value()
-      const URLs = getURLfromPost(posts)
+      const urls = getURLfromPost(posts)
 
-      res.send(URLs)
+      res.send(urls)
     })
 
     // -- /chat-reference, export all links shared in the chat
@@ -126,9 +126,9 @@ db(adapter)
         await fsextra.ensureDir(exportFolder)
 
         const posts = db.get('posts').value()
+        const urls = getURLfromPost(posts)
 
-        // before generating a new html file,
-        // check if an existing one outputted after the last chat-msg exists
+        if (urls.length > 0) {
 
         // get list of files from export-folder
         const exportFiles = await fs.readdir(exportFolder)
@@ -251,17 +251,17 @@ if (settings.donate) {
 }
 
 function getURLfromPost(posts) {
-  const URLs = []
+  const urls = []
 
   posts.map(post => {
     return post.value.match(URLmatch)
   }).filter(item => {
     if (item !== null) {
-      URLs.push(item[0])
+      urls.push(item[0])
     }
   })
 
-  return URLs
+  return urls
 }
 
 async function exportDoc(exportFiles, exportFolder, posts, localhost) {
@@ -294,7 +294,9 @@ async function exportDoc(exportFiles, exportFolder, posts, localhost) {
     // and if chat-last-mgs timestamp is newer than chat-list.html export time
     if (chatMsgLast.value.match(URLmatch) !== null && new Date(chatMsgLast.timestamp) > new Date(exportFileStat['mtime'])) {
 
-      await writeDocument(posts, dateNow)
+      const urls = getURLfromPost(posts)
+      console.log('urls =>', urls)
+      await writeDocument(urls, dateNow)
 
       const documentURL = `${localhost}/${exportURLfragment}/${dateNow}`
       return documentURL
@@ -308,8 +310,8 @@ async function exportDoc(exportFiles, exportFolder, posts, localhost) {
 
   } else {
     // if there's no file exported yet, make a new one
-
-    await writeDocument(posts, dateNow)
+    const urls = getURLfromPost(posts)
+    await writeDocument(urls, dateNow)
 
     const documentURL = `${localhost}/${exportURLfragment}/${dateNow}`
     return documentURL
@@ -317,14 +319,13 @@ async function exportDoc(exportFiles, exportFolder, posts, localhost) {
   }
 }
 
-async function writeDocument(posts, dateNow) {
-  const URLs = getURLfromPost(posts) 
+async function writeDocument(urls, dateNow) {
 
   const chatLinksFile = nunjucks.render('chat-urls.html', {
     title: settings.title, 
     headline: settings.headline.replace(/\n/g, ' '),
     date: dateNow,
-    urls: URLs
+    urls: urls
   });
 
   // write chat-links.html export file to disk
