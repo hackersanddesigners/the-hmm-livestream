@@ -299,6 +299,59 @@ function getURLfromPost(posts) {
   return URLs
 }
 
+async function exportU(exportFiles, exportFolder, posts, localhost) {
+
+  // used to build final url path to access HTML file
+  const exportURLfragment = process.env.EXPORT_FOLDER.split('/').slice(-1)[0]
+
+  // build date string in a modified ISO8601 format => 2021-04-26T165536
+  const date = new Date();
+  const dateNow = date.toISOString().replace(/:/g, '').split('.')[0]
+
+  // if there's already one or more file exported, 
+  // do timestamp comparison b/t file mtime and chat last msg timestamp
+  // in order to decide if exporting a newer version of the doc or not
+  if (exportFiles.length > 0) {
+
+    // get latest exported file 
+    // and fetch stats (eg file modified timestamp => mtime)
+    const exportFileLast = exportFiles[exportFiles.length -1]
+    const exportFileStat = await fs.stat(path.resolve(exportFolder, exportFileLast))
+
+    // get last chat msg
+    const chatMsgLast = posts[posts.length -1]
+
+    console.log(chatMsgLast.value.match(URLmatch) === null, 
+      new Date(chatMsgLast.timestamp), '>', new Date(exportFileStat['mtime']), '=>', 
+      new Date(chatMsgLast.timestamp) > new Date(exportFileStat['mtime']))
+
+    // check if chat-last-msg contains one or more URLs,
+    // and if chat-last-mgs timestamp is newer than chat-list.html export time
+    if (chatMsgLast.value.match(URLmatch) !== null && new Date(chatMsgLast.timestamp) > new Date(exportFileStat['mtime'])) {
+
+      await writeDocument(posts, dateNow)
+
+      const documentURL = `${localhost}/${exportURLfragment}/${dateNow}`
+      return documentURL
+
+    } else {
+
+      const documentURL = `${localhost}/${exportURLfragment}/${exportFileLast}`
+      return documentURL
+
+    }
+
+  } else {
+    // if there's no file exported yet, make a new one
+
+    await writeDocument(posts, dateNow)
+
+    const documentURL = `${localhost}/${exportURLfragment}/${dateNow}`
+    return documentURL
+
+  }
+}
+
 // -- start
 initialize().then((stream) => {
   const listener = http.listen(process.env.PORT || 4000, function() {
