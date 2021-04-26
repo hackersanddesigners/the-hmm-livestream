@@ -309,7 +309,7 @@ async function exportDoc(exportFiles, exportFolder, posts, localhost) {
       console.log('urls =>', urls)
       await writeDocument(urls, dateNow)
 
-      const documentURL = `${localhost}/${exportURLfragment}/${dateNow}`
+      const documentURL = `${localhost}/${exportURLfragment}/${dateNow}.html`
       return documentURL
 
     } else {
@@ -324,7 +324,7 @@ async function exportDoc(exportFiles, exportFolder, posts, localhost) {
     const urls = getURLfromPost(posts)
     await writeDocument(urls, dateNow)
 
-    const documentURL = `${localhost}/${exportURLfragment}/${dateNow}`
+    const documentURL = `${localhost}/${exportURLfragment}/${dateNow}.html`
     return documentURL
 
   }
