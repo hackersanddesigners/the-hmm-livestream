@@ -65,7 +65,7 @@ class chat extends nc {
       }
 
       function downloadButton (urls, download) {
-        if (urls.length > 0) {
+        if (urls.length > 0 && download !== '') {
           return html`
             <a href="${download}" download="" target="_blank">Download as HTML file</a>
           `
