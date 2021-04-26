@@ -112,6 +112,45 @@ db(adapter)
       res.send(URLs)
     })
 
+    // -- /chat-reference, export all links shared in the chat
+    app.get('/api/get-chat-urls', async(req, res) => {
+      // 1. get posts
+      // 2. parse all URLs
+      // 3. create .html
+      // 4. send back URL download 
+
+      try { 
+
+        // create export folder if does not exist
+        const exportFolder = path.resolve(__dirname, process.env.EXPORT_FOLDER)
+        await fsextra.ensureDir(exportFolder)
+
+        const posts = db.get('posts').value()
+
+        // before generating a new html file,
+        // check if an existing one outputted after the last chat-msg exists
+
+        // get list of files from export-folder
+        const exportFiles = await fs.readdir(exportFolder)
+
+        const localhost = `http://${req.get('host')}`
+        const documentURL = await exportU(exportFiles, exportFolder, posts, localhost) 
+
+        res.send({
+          url: documentURL
+        })
+
+      } catch (err) {
+        console.log('err =>', err)
+
+        res.status(500).send({
+          error: err,
+          message : 'The file does not exist'
+        })
+      }
+
+    })
+
     // -- socket.io
     socket.on('connection', (sock) => {
       const userCount = sock.client.conn.server.clientsCount
@@ -156,80 +195,6 @@ app.get('/stream', async(req, res) => {
   res.json(
     publicStreamDetails(stream)
   )
-})
-
-// -- /chat-reference, export all links shared in the chat
-app.get('/api/get-chat-urls', async(req, res) => {
-  // 1. open stream / file `db.json`
-  // 2. parse all URLs
-  // 3. create .html
-  // 4. send back URL download
-
-  try {
-    const data = await fs.readFile('./.data/db.json', 'utf8')
-    const chatLog = JSON.parse(data)
-
-    // before generating a new html file,
-    // check if an existing one outputted after the last chat-msg exists
-    
-    const exportFiles = await fs.readdir(path.resolve(__dirname, process.env.EXPORT_FOLDER));
-    const exportFileLast = exportFiles[exportFiles.length -1]
-    const exportFileStat = await fs.stat(path.resolve(__dirname, `${process.env.EXPORT_FOLDER}/${exportFileLast}`))
-
-    // used to build final url path to access HTML file
-    const exportURLfragment = process.env.EXPORT_FOLDER.split('/').slice(-1)[0]
-
-    const chatMsgLast = chatLog.posts[chatLog.posts.length -1]
-
-    const localhost = `http://${req.get('host')}`
-
-    console.log(chatMsgLast.value.match(URLmatch) === null, new Date(chatMsgLast.timestamp), '>', new Date(exportFileStat['ctime']), '=>', new Date(chatMsgLast.timestamp) > new Date(exportFileStat['ctime']))
-
-    // check if chat-last-msg contains one or more URLs,
-    // and if chat-last-mgs timestamp is newer than chat-list.html export time
-    if (chatMsgLast.value.match(URLmatch) !== null && new Date(chatMsgLast.timestamp) > new Date(exportFileStat['ctime'])) {
-
-      const URLs = getURLfromPost(chatLog.posts)
-
-      const date = new Date();
-      const dateNow = date.toISOString().replace(/:/g, '').split('.')[0]
-      const chatLinksFile = nunjucks.render('chat-urls.html', {
-        title: settings.title, 
-        headline: settings.headline.replace(/\n/g, ' '),
-        date: dateNow,
-        urls: URLs
-      });
-
-      // create export folder if does not exist
-      fsextra.ensureDirSync(path.resolve(__dirname, process.env.EXPORT_FOLDER))
-
-      // write chat-links.html export file to disk
-      await fs.writeFile(path.resolve(__dirname, `${process.env.EXPORT_FOLDER}/${dateNow}.html`), chatLinksFile) 
-
-      res.send({
-        message: 'URLs not exported yet',
-        url: `${localhost}/${exportURLfragment}/${exportFileLast}`
-      })
-
-    } else {
-
-      const URLs = getURLfromPost(chatLog.posts)
-      
-      res.send({
-        message: 'URLs already exported',
-        url: `${localhost}/${exportURLfragment}/${exportFileLast}`,
-      })
-
-    }
-
-  } catch (err) {
-    console.log('err =>', err)
-    res.status(500).send({
-      error: err,
-      message : 'The file does not exist'
-    })
-  }
-
 })
 
 // -- mux-hook, listen to mux callbacks
