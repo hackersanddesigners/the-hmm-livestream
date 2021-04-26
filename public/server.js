@@ -134,7 +134,7 @@ db(adapter)
         const exportFiles = await fs.readdir(exportFolder)
 
         const localhost = `http://${req.get('host')}`
-        const documentURL = await exportU(exportFiles, exportFolder, posts, localhost) 
+        const documentURL = await exportDoc(exportFiles, exportFolder, posts, localhost) 
 
         res.send({
           url: documentURL
@@ -264,7 +264,7 @@ function getURLfromPost(posts) {
   return URLs
 }
 
-async function exportU(exportFiles, exportFolder, posts, localhost) {
+async function exportDoc(exportFiles, exportFolder, posts, localhost) {
 
   // used to build final url path to access HTML file
   const exportURLfragment = process.env.EXPORT_FOLDER.split('/').slice(-1)[0]
