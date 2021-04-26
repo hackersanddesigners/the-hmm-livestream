@@ -352,6 +352,25 @@ async function exportU(exportFiles, exportFolder, posts, localhost) {
   }
 }
 
+async function writeDocument(posts, dateNow) {
+  const URLs = getURLfromPost(posts) 
+
+  const chatLinksFile = nunjucks.render('chat-urls.html', {
+    title: settings.title, 
+    headline: settings.headline.replace(/\n/g, ' '),
+    date: dateNow,
+    urls: URLs
+  });
+
+  // write chat-links.html export file to disk
+  try {
+    await fs.writeFile(path.resolve(__dirname, `${process.env.EXPORT_FOLDER}/${dateNow}.html`), chatLinksFile)
+  } catch (err) {
+    throw err
+  }
+
+}
+
 // -- start
 initialize().then((stream) => {
   const listener = http.listen(process.env.PORT || 4000, function() {
