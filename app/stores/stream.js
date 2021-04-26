@@ -82,7 +82,7 @@ function stream (state, emitter) {
     const postURL = msg.value.match(URLmatch)
 
     if (postURL !== null) {
-      state.components.chat.urls.push(postURL)
+      state.components.chat.urls.push(postURL[0])
       emitter.emit('render')
     }
 
