@@ -30,7 +30,7 @@ class chat extends nc {
         ${storage()}
         ${chatView(data)}
         ${inputForm(data.view, isChatMessageVisible)}
-        <button type="button" onclick=${chatViewToggle(emit)} class="curp fs0-8 x xdr xafe px0-25 py0-5 bt-wh bgc-bl">${data.view ? 'Show chat' : 'Show only URLs'}</button>
+        <button type="button" onclick=${chatViewToggle(emit)} class="curp fs0-8 x xdr xafe pt0-5 pr1 pb0-5 pl0-5 bt-wh bgc-bl">${data.view ? 'Show chat' : 'Show only URLs'}</button>
       </div>
     `
 
@@ -50,7 +50,7 @@ class chat extends nc {
     function chatView (data) {
       if (data.view) {
         return html`
-          <div class="chat-wrap ${sessionStorage.getItem('username') !== null ? 'h-chat-sg' : 'h-chat-db'} p0-5 oys copy ow mba">
+          <div class="chat-wrap ${sessionStorage.getItem('username') !== null ? 'h-chat-sg' : 'h-chat-db'} pt0-5 pr1 mba pl0-5 oys copy ow">
             <p class="pt1">List of shared URLs from the chat:</p>
             <ul class="url-list oxh">${urlList(data.urls)}</ul>
             ${downloadButton(data.urls, data.download)}
@@ -58,7 +58,7 @@ class chat extends nc {
         `
       } else {
         return html`
-          <div class="chat-wrap ${sessionStorage.getItem('username') !== null ? 'h-chat-sg' : 'h-chat-db'} p0-5 oys">
+          <div class="chat-wrap ${sessionStorage.getItem('username') !== null ? 'h-chat-sg' : 'h-chat-db'} pt0-5 pr1 mba pl0-5 oys">
             <div class="chat-list oxh">${msgList(data.posts)}</div>
           </div>
         `
@@ -67,7 +67,7 @@ class chat extends nc {
       function downloadButton (urls, download) {
         if (urls.length > 0 && download !== '') {
           return html`
-            <a href="${download}" download="" target="_blank">Download as HTML file</a>
+            <a href="${download}" download="" target="_blank" class="db pb1">Download as HTML file</a>
           `
         }
       }
