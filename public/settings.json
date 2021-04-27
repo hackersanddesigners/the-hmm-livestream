@@ -1,0 +1,16 @@
+{
+  "title": "Hackers & Designers livestream",
+  "headline": "Intersectional Search\nin Queer and Trans Archives",
+  "ticker": {
+    "text": "4 November 2020, 19.00 - 21.30 |",
+    "backgroundColour": "#ffff00",
+    "foregroundColour": "#000",
+    "typeface": "Arial Rounded MT Bold"
+  },
+  "logo": false,
+  "donateButton": true,
+  "stream": {
+    "active": true,
+    "testmode": true
+  }
+}
